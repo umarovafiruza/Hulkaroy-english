@@ -7,10 +7,13 @@
 (function () {
   'use strict';
 
-  /* Eski musiqa sozlamalari qoldiqlarini tozalash */
+  /* Eski sozlamalar qoldiqlarini tozalash */
   try {
     localStorage.removeItem('sf_vol');
     localStorage.removeItem('sf_track');
+    localStorage.removeItem('sf_m_vol');
+    localStorage.removeItem('sf_m_track');
+    localStorage.removeItem('sf_m_enabled');
   } catch (e) {}
 
   /* ---------- DOM elementlari ---------- */
@@ -44,15 +47,6 @@
   const rtitleTextEl = $('rtitleText');
   const rlvlEl = $('rlvl');
   const levelTabsEl = $('levelTabs');
-  const musicToggleBtn = $('musicToggle');
-  const musicPrevBtn = $('musicPrev');
-  const musicNextBtn = $('musicNext');
-  const trackNameEl = $('trackName');
-  const trackChipsEl = $('trackChips');
-  const musicVolInput = $('musicVol');
-  const musicVolVal = $('musicVolVal');
-  const musicVolDownBtn = $('musicVolDown');
-  const musicVolUpBtn = $('musicVolUp');
   const recBadgeEl = $('recBadge');
   const recDotEl = $('recDot');
   const recTextEl = $('recText');
@@ -119,42 +113,6 @@
     setLevel(lvl) {
       try {
         localStorage.setItem('sf_lvl', String(lvl));
-      } catch (e) {}
-    },
-    getMusicEnabled() {
-      try {
-        return localStorage.getItem('sf_m_enabled') === 'true';
-      } catch (e) {
-        return false;
-      }
-    },
-    setMusicEnabled(v) {
-      try {
-        localStorage.setItem('sf_m_enabled', v ? 'true' : 'false');
-      } catch (e) {}
-    },
-    getMusicTrack() {
-      try {
-        const t = Number(localStorage.getItem('sf_m_track'));
-        if (!isNaN(t) && t >= 0 && t < 4) return t;
-      } catch (e) {}
-      return 0;
-    },
-    setMusicTrack(t) {
-      try {
-        localStorage.setItem('sf_m_track', String(t));
-      } catch (e) {}
-    },
-    getMusicVol() {
-      try {
-        const v = Number(localStorage.getItem('sf_m_vol'));
-        if (!isNaN(v) && v >= 0 && v <= 100) return v;
-      } catch (e) {}
-      return 30;
-    },
-    setMusicVol(v) {
-      try {
-        localStorage.setItem('sf_m_vol', String(v));
       } catch (e) {}
     },
     getDictaphoneEnabled() {
@@ -312,7 +270,6 @@
           btn.classList.remove('active');
           return;
         } else {
-          player.pause();
           this.currentAudio.play().catch(() => {});
           btn.textContent = 'Pauza';
           btn.classList.add('active');
@@ -321,7 +278,6 @@
       }
 
       this.stopCurrent();
-      player.pause();
 
       const audio = new Audio(audioSrc);
       this.currentAudio = audio;
@@ -489,190 +445,6 @@
       }
     }
   });
-
-  /* ---------- Sokin Lofi Musiqa Pleyeri ---------- */
-  const MUSIC_TRACKS = [
-    {
-      id: 'cold-brew',
-      title: 'Cold Brew',
-      shortTitle: 'Cold Brew',
-      src: 'music/cold-brew.mp3',
-      fallback: 'https://raw.githubusercontent.com/fuma-nama/fuma-lofi/master/public/cold-brew-ra-main-version-29719-02-38.mp3'
-    },
-    {
-      id: 'kyoto',
-      title: 'Night in Kyoto',
-      shortTitle: 'Kyoto',
-      src: 'music/night-in-kyoto.mp3',
-      fallback: 'https://raw.githubusercontent.com/fuma-nama/fuma-lofi/master/public/night-in-kyoto-avbe-main-version-21302-01-57.mp3'
-    },
-    {
-      id: 'moonshine',
-      title: 'Moonshine',
-      shortTitle: 'Moonshine',
-      src: 'music/moonshine.mp3',
-      fallback: 'https://raw.githubusercontent.com/fuma-nama/fuma-lofi/master/public/moonshine-prigida-main-version-01-36-17027.mp3'
-    },
-    {
-      id: 'sunday',
-      title: 'Sunday Coffee',
-      shortTitle: 'Sunday',
-      src: 'music/sunday-coffee.mp3',
-      fallback: 'https://raw.githubusercontent.com/adamcheaib/random_chillax/main/sounds/Rebecca%20Mardal%20-%20Sunday%20Coffee.mp3'
-    }
-  ];
-
-  const player = {
-    audio: null,
-    isPlaying: false,
-    trackIndex: 0,
-    volume: 30,
-    isDucked: false,
-
-    init() {
-      this.trackIndex = store.getMusicTrack();
-      this.volume = store.getMusicVol();
-
-      this.audio = new Audio();
-      this.audio.preload = 'metadata';
-      this.updateAudioSrc();
-      this.applyVolume();
-
-      // Bir kuy tugagach, avtomatik keyingisiga o'tish (cheksiz sokin pleylist)
-      this.audio.addEventListener('ended', () => {
-        this.nextTrack(true);
-      });
-
-      // Agar biror sabab bilan lokal fayl o'qilmasa, zaxira onlayn URL dan yuklash
-      this.audio.addEventListener('error', () => {
-        const cur = MUSIC_TRACKS[this.trackIndex];
-        if (cur && cur.fallback && this.audio.src !== cur.fallback) {
-          console.warn('Mahalliy kuy yuklanmadi, onlayn manbaga ulanmoqda:', cur.fallback);
-          this.audio.src = cur.fallback;
-          if (this.isPlaying) {
-            this.audio.play().catch(() => {});
-          }
-        }
-      });
-
-      this.updateUI();
-    },
-
-    updateAudioSrc() {
-      const cur = MUSIC_TRACKS[this.trackIndex];
-      if (cur) {
-        this.audio.src = cur.src;
-      }
-    },
-
-    applyVolume() {
-      if (!this.audio) return;
-      const effectiveVol = this.isDucked
-        ? Math.min(0.08, (this.volume / 100) * 0.25)
-        : (this.volume / 100);
-      this.audio.volume = Math.max(0, Math.min(1, effectiveVol));
-    },
-
-    play() {
-      if (!this.audio) return;
-      this.isPlaying = true;
-      store.setMusicEnabled(true);
-      const playPromise = this.audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.log('Audio ijrosi bloklandi yoki to\'xtatildi:', err);
-          this.isPlaying = false;
-          this.updateUI();
-        });
-      }
-      this.updateUI();
-    },
-
-    pause() {
-      if (!this.audio) return;
-      this.isPlaying = false;
-      store.setMusicEnabled(false);
-      this.audio.pause();
-      this.updateUI();
-    },
-
-    toggle() {
-      if (this.isPlaying) {
-        this.pause();
-      } else {
-        this.play();
-      }
-    },
-
-    setTrack(idx, shouldPlay = true) {
-      if (idx < 0) idx = MUSIC_TRACKS.length - 1;
-      if (idx >= MUSIC_TRACKS.length) idx = 0;
-      this.trackIndex = idx;
-      store.setMusicTrack(idx);
-
-      const wasPlaying = this.isPlaying || shouldPlay;
-      this.updateAudioSrc();
-      if (wasPlaying) {
-        this.play();
-      } else {
-        this.updateUI();
-      }
-    },
-
-    nextTrack(autoplay = false) {
-      this.setTrack((this.trackIndex + 1) % MUSIC_TRACKS.length, autoplay || this.isPlaying);
-    },
-
-    prevTrack() {
-      this.setTrack((this.trackIndex - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length, this.isPlaying);
-    },
-
-    setVolume(val) {
-      const clamped = Math.max(0, Math.min(100, Math.round(val)));
-      this.volume = clamped;
-      store.setMusicVol(clamped);
-      this.applyVolume();
-      this.updateUI();
-    },
-
-    duck(enabled) {
-      this.isDucked = Boolean(enabled);
-      this.applyVolume();
-    },
-
-    updateUI() {
-      const cur = MUSIC_TRACKS[this.trackIndex];
-      if (trackNameEl && cur) {
-        trackNameEl.textContent = cur.title;
-      }
-      if (musicToggleBtn) {
-        if (this.isPlaying) {
-          musicToggleBtn.textContent = 'Kuy: Yoqiq';
-          musicToggleBtn.classList.add('active');
-        } else {
-          musicToggleBtn.textContent = "Kuy: O'chiq";
-          musicToggleBtn.classList.remove('active');
-        }
-      }
-      if (musicVolInput) {
-        musicVolInput.value = this.volume;
-      }
-      if (musicVolVal) {
-        musicVolVal.textContent = `${this.volume}%`;
-      }
-      if (trackChipsEl) {
-        const chips = trackChipsEl.querySelectorAll('.chip');
-        chips.forEach((c) => {
-          const tIdx = Number(c.dataset.track);
-          if (tIdx === this.trackIndex) {
-            c.classList.add('active');
-          } else {
-            c.classList.remove('active');
-          }
-        });
-      }
-    }
-  };
 
   /* ---------- Diktafon (Ovoz Yozib Olish) ---------- */
   const dictaphone = {
@@ -918,7 +690,6 @@
       }
       try {
         tts.cancel();
-        player.duck(true);
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = 'en-US';
         utter.rate = rate;
@@ -930,7 +701,6 @@
         const complete = () => {
           if (!finished) {
             finished = true;
-            player.duck(false);
             resolve();
           }
         };
@@ -944,7 +714,6 @@
         tts.speak(utter);
       } catch (err) {
         console.warn('TTS xatolik:', err);
-        player.duck(false);
         resolve();
       }
     });
@@ -1082,9 +851,6 @@
 
     showOverlay('');
     R.inCountdown = false;
-    if (store.getMusicEnabled()) {
-      player.play();
-    }
     // O'qish boshlanishi bilan diktafon ovoz yozishni boshlaydi
     dictaphone.start();
     playScroll();
@@ -1275,52 +1041,6 @@
     });
   }
 
-  // Sokin musiqa boshqaruvi
-  if (musicToggleBtn) {
-    musicToggleBtn.addEventListener('click', () => {
-      player.toggle();
-    });
-  }
-
-  if (musicPrevBtn) {
-    musicPrevBtn.addEventListener('click', () => {
-      player.prevTrack();
-    });
-  }
-
-  if (musicNextBtn) {
-    musicNextBtn.addEventListener('click', () => {
-      player.nextTrack(player.isPlaying);
-    });
-  }
-
-  if (trackChipsEl) {
-    trackChipsEl.addEventListener('click', (e) => {
-      const chip = e.target.closest('.chip');
-      if (chip && chip.dataset.track !== undefined) {
-        player.setTrack(Number(chip.dataset.track), player.isPlaying);
-      }
-    });
-  }
-
-  if (musicVolInput) {
-    musicVolInput.addEventListener('input', (e) => {
-      player.setVolume(Number(e.target.value));
-    });
-  }
-
-  if (musicVolDownBtn) {
-    musicVolDownBtn.addEventListener('click', () => {
-      player.setVolume(player.volume - 10);
-    });
-  }
-
-  if (musicVolUpBtn) {
-    musicVolUpBtn.addEventListener('click', () => {
-      player.setVolume(player.volume + 10);
-    });
-  }
-
   // Diktafon sozlamasi tugmasi
   if (recToggleBtn) {
     recToggleBtn.addEventListener('click', () => {
@@ -1444,16 +1164,10 @@
     }
   });
 
-  // Klaviatura tugmalari (Space, strelkalar, M va 1-4 raqamlar)
+  // Klaviatura tugmalari (Space, strelkalar va 1-4 raqamlar)
   document.addEventListener('keydown', (e) => {
     if (readerEl.classList.contains('hidden')) return;
     if (e.target.tagName === 'INPUT') return;
-
-    // M tugmasi orqali sokin musiqani yoqish/to'xtatish
-    if (e.key === 'm' || e.key === 'M') {
-      player.toggle();
-      return;
-    }
 
     // 1-4 raqamlari orqali tezkor tezlikni tanlash
     if (e.key === '1') { setSpeed(80); return; }
@@ -1496,7 +1210,6 @@
   });
 
   /* ---------- Dasturni ishga tushirish ---------- */
-  player.init();
   dictaphone.init();
   updateSpeedDisplay();
   renderHome();

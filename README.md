@@ -29,16 +29,11 @@ Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, 
    - Yozilgan audio `localStorage`da saqlanadi (maksimal 3 dona audio, yangisi qo'shilganda eng eskisi o'chadi).
    - "Barakalla" yakuniy ekranida va Bosh sahifada yozuvlarni darhol tinglash (Eshitish/Pauza), o'chirish va siljitish imkoniyati.
 
-5. **Sokin Lofi Fon Musiqasi**:
-   - Internetdagi ochiq manbalardan (CC0 / Creative Commons) olingan 4 ta orombaxsh lofi treki (`Cold Brew`, `Night in Kyoto`, `Moonshine`, `Sunday Coffee`).
-   - Musiqani to'liq boshqarish: Yoqish/O'chirish, trek almashtirish (`‹` va `›`), trek tugmalari va ovoz balandligini sozlash (0–100%).
-   - Audio Ducking: Ovozli hisoblagich yoki so'z talaffuzida fon musiqasi avtomatik pasayadi.
-   - Klaviaturadagi `M` tugmasi orqali tezkor yoqish/o'chirish.
-
-6. **Minimalist Dizayn**:
+5. **Minimalist va Ergonomik Mobil Dizayn**:
    - Oq fon, to'q qora matn va sokin kulrang elementlar.
    - Emojilar va ortiqcha bezaklarsiz sof tipografiya (Inter).
-   - Mobil va kompyuter ekranlariga to'liq moslashuvchan (Responsive).
+   - Mobil ekranda tugmalar qulay, bir tekis va tartibli joylashgan (Pauza, Boshidan, Yozuv).
+   - Sensorli ekranlar va barcha qurilmalarga to'liq moslashuvchan (Responsive).
 
 ---
 
@@ -47,15 +42,10 @@ Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, 
 ```
 Hulkaroy-english/
 ├── index.html       # Asosiy HTML sahifasi
-├── style.css        # Minimalist dizayn va moslashuvchan CSS
-├── script.js        # Teleprompter, diktafon, musiqa va TTS mantiqi
+├── style.css        # Minimalist dizayn va qulay mobil/desktop CSS
+├── script.js        # Teleprompter, diktafon va TTS mantiqi
 ├── data.js          # A1, A2, B1 darajadagi 15 ta matnlar bazasi
-├── README.md        # Loyiha haqida to'liq ma'lumot
-└── music/           # Sokin lofi audio treklari
-    ├── cold-brew.mp3
-    ├── moonshine.mp3
-    ├── night-in-kyoto.mp3
-    └── sunday-coffee.mp3
+└── README.md        # Loyiha haqida to'liq ma'lumot
 ```
 
 ---
