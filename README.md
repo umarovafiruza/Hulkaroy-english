@@ -1,39 +1,30 @@
 # Speak Fast
 
-Ingliz tilida ovoz chiqarib o'qish va ravon so'zlashuvni o'rganish uchun teleprompter uslubidagi zamonaviy veb-ilova.
+Ingliz tilida ovoz chiqarib o'qish (Speaking) va matnni o'qib tushunish (Reading Comprehension) uchun zamonaviy veb-ilova.
 
 Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, CSS va JavaScript**.
 
 ---
 
-## Asosiy Imkoniyatlar
+## Asosiy Bo'limlar va Imkoniyatlar
 
-1. **CEFR Darajalariga moslangan matnlar**:
-   - **A1 Oson (5 ta)**: Kundalik sodda jumlalar va boshlang'ich leksika.
-   - **A2 O'rta (5 ta)**: Amaliy mavzular va erkin nutq uchun qulay iboralar.
-   - **B1 Murakkab (5 ta)**: Fikr yuritish va boyitilgan so'z boyligi.
-   - Bosh sahifada darajalar bo'yicha tezkor filtrlar.
+### 1. Speaking Bo'limi (Ravon gapirish)
+- **Teleprompter uslubidagi avtomatik surilish**: Tezlikni so'z/daqiqa (WPM) hisobida aniq boshqarish (60–260 so'z/daq) va tezkor tugmalar (*Sekin 80*, *O'rtacha 110*, *Tez 150*, *Tezkor 200*).
+- **Diktafon (Ovoz yozib olish)**: Mashq davomida foydalanuvchi ovozi yozib olinadi va `localStorage`da saqlanadi (maksimal 3 dona audio FIFO prinsipi asosida).
+- **Darajalar**: A1, A2, B1 darajalarida 15 ta matn.
+- **Audio tinglash**: Har bir audio yozuvni darhol saytda tinglash (Eshitish/Pauza) va boshqarish imkoniyati.
 
-2. **Teleprompter uslubidagi avtomatik surilish**:
-   - Tezlikni so'z/daqiqa (WPM) hisobida aniq boshqarish (60–260 so'z/daq).
-   - Tezkor tanlovlar (*Sekin 80*, *O'rtacha 110*, *Tez 150*, *Tezkor 200*).
-   - O'qish chizig'i markazlashtirilgan, yuqori va pastki qatorlar muloyim gradient bilan xiralashtiriladi.
-   - Har bir qatorda 3–5 tagacha so'z joylashishi ta'minlangan (ravon talaffuz uchun qulay).
+### 2. Reading Bo'limi (O'qib tushunish)
+- **Hikoyalar va maqolalar**: A1, A2, B1 darajalarida 15 ta alohida qiziqarli hikoyalar.
+- **Tushunish darajasini tekshirish (Quiz)**: Har bir matn ostida 3 tadan comprehension savollari joylashgan.
+- **Tezkor fikr-mulohaza (Instant Feedback)**: Variant tanlanishi bilanoq javob to'g'ri (yashil) yoki noto'g'ri (qizil) ekanligi darhol ko'rsatiladi va to'g'ri javob belgilanadi.
+- **Natija va hisobot**: Barcha savollar bajarilgach, umumiy ball (masalan, *3/3 to'g'ri javob*) va xulosaviy tavsiya ko'rsatiladi.
+- **Qayta ishlash**: Testni istalgan vaqtda qayta yechish imkoniyati.
 
-3. **Murakkab so'zlar (Hard Words) va talaffuz**:
-   - Matndagi notanish so'zlar nuqtali chiziq bilan belgilangan.
-   - Bosilganda o'qish avtomatik to'xtaydi, so'zning o'zbekcha tarjimasi chiqadi va Web Speech API orqali talaffuz qilib beriladi.
-
-4. **Diktafon (Voice Recorder) va LocalStorage**:
-   - O'qish jarayonida foydalanuvchi ovozi diktafon orqali yozib olinadi.
-   - Yozilgan audio `localStorage`da saqlanadi (maksimal 3 dona audio, yangisi qo'shilganda eng eskisi o'chadi).
-   - "Barakalla" yakuniy ekranida va Bosh sahifada yozuvlarni darhol tinglash (Eshitish/Pauza), o'chirish va siljitish imkoniyati.
-
-5. **Minimalist va Ergonomik Mobil Dizayn**:
-   - Oq fon, to'q qora matn va sokin kulrang elementlar.
-   - Emojilar va ortiqcha bezaklarsiz sof tipografiya (Inter).
-   - Mobil ekranda tugmalar qulay, bir tekis va tartibli joylashgan (Pauza, Boshidan, Yozuv).
-   - Sensorli ekranlar va barcha qurilmalarga to'liq moslashuvchan (Responsive).
+### 3. Umumiy Imkoniyatlar
+- **Murakkab so'zlar (Hard Words) va Talaffuz**: Barcha matnlarda notanish so'zlar nuqtali chiziq bilan belgilangan. Bosilganda o'zbekcha tarjimasi chiqadi va Web Speech API orqali talaffuz qilib beriladi.
+- **Minimalist va Ergonomik Mobil Dizayn**: Oq-qora-kulrang palitra, nozik chiziqlar, ortiqcha bezak va emojilarsiz toza Inter tipografiyasi.
+- **Boshqaruv navigatsiyasi**: Yuqoridagi minimalist Tab orqali Speaking va Reading rejimlari o'rtasida bir bosish bilan o'tish.
 
 ---
 
@@ -41,10 +32,10 @@ Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, 
 
 ```
 Hulkaroy-english/
-├── index.html       # Asosiy HTML sahifasi
-├── style.css        # Minimalist dizayn va qulay mobil/desktop CSS
-├── script.js        # Teleprompter, diktafon va TTS mantiqi
-├── data.js          # A1, A2, B1 darajadagi 15 ta matnlar bazasi
+├── index.html       # Asosiy HTML sahifasi (Speaking va Reading interfeysi)
+├── style.css        # Minimalist dizayn, quiz va moslashuvchan CSS
+├── script.js        # Teleprompter, quiz, diktafon va TTS mantiqi
+├── data.js          # Speaking va Reading uchun A1, A2, B1 matnlar bazasi
 └── README.md        # Loyiha haqida to'liq ma'lumot
 ```
 
@@ -52,4 +43,4 @@ Hulkaroy-english/
 
 ## Ishga tushirish
 
-Hech qanday o'rnatish yoki build qilish talab etilmaydi. Shunchaki `index.html` faylini istalgan brauzerda oching.
+Hech qanday o'rnatish yoki build qilish talab etilmaydi. Shunchaki `index.html` faylini istalgan zamonaviy brauzerda oching.

@@ -62,8 +62,29 @@
   const finishRecFillEl = $('finishRecFill');
   const finishRecTimeEl = $('finishRecTime');
 
+  /* Reading bo'limi DOM elementlari */
+  const modeTabsEl = $('modeTabs');
+  const homeTitleEl = $('homeTitle');
+  const homeLeadEl = $('homeLead');
+  const readingReaderEl = $('readingReader');
+  const readingBackBtn = $('readingBack');
+  const rReadingTitleEl = $('rReadingTitle');
+  const rReadingLvlEl = $('rReadingLvl');
+  const rReadingQCountEl = $('rReadingQCount');
+  const readingArticleTitleEl = $('readingArticleTitle');
+  const readingMetaLineEl = $('readingMetaLine');
+  const readingTextEl = $('readingText');
+  const quizSectionEl = $('quizSection');
+  const quizListEl = $('quizList');
+  const quizResultEl = $('quizResult');
+  const quizResultScoreEl = $('quizResultScore');
+  const quizResultMsgEl = $('quizResultMsg');
+  const quizRetryBtn = $('quizRetryBtn');
+  const quizFinishBtn = $('quizFinishBtn');
+
   /* ---------- Ma'lumotlar va Saqlash (LocalStorage) ---------- */
   const topicsData = (typeof TOPICS !== 'undefined') ? TOPICS : (window.TOPICS || []);
+  const readingTopicsData = (typeof READING_TOPICS !== 'undefined') ? READING_TOPICS : (window.READING_TOPICS || []);
 
   const store = {
     get() {
@@ -89,6 +110,33 @@
       } catch (e) {
         console.error('LocalStorage saqlashda xatolik:', e);
       }
+    },
+    getReading() {
+      try {
+        const raw = localStorage.getItem('sf_reading');
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return { completed: {} };
+    },
+    saveReadingResult(id, correct, total) {
+      try {
+        const data = this.getReading();
+        if (!data.completed) data.completed = {};
+        data.completed[id] = { correct, total, ts: Date.now() };
+        localStorage.setItem('sf_reading', JSON.stringify(data));
+      } catch (e) {}
+    },
+    getMode() {
+      try {
+        const m = localStorage.getItem('sf_mode');
+        if (m === 'reading' || m === 'speaking') return m;
+      } catch (e) {}
+      return 'speaking';
+    },
+    setMode(m) {
+      try {
+        localStorage.setItem('sf_mode', m);
+      } catch (e) {}
     },
     getSpeed() {
       try {
@@ -377,52 +425,114 @@
   }
 
   /* ---------- Bosh sahifa (Home) ---------- */
+  let currentMode = store.getMode();
   let currentLevelFilter = store.getLevel();
 
-  function renderHome() {
-    const s = store.get();
-    const mins = Math.round(s.secs / 60);
+  function setMode(mode) {
+    currentMode = mode;
+    store.setMode(mode);
+    renderHome();
+  }
 
-    if (s.reads > 0 || mins > 0) {
-      statsEl.textContent = `Siz ${s.reads} marta mashq qildingiz, jami ${mins} daqiqa.`;
-    } else {
-      statsEl.textContent = '';
+  if (modeTabsEl) {
+    modeTabsEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.mode-btn');
+      if (btn && btn.dataset.mode) {
+        setMode(btn.dataset.mode);
+      }
+    });
+  }
+
+  function renderHome() {
+    // Mode tabs holatini yangilash
+    if (modeTabsEl) {
+      modeTabsEl.querySelectorAll('.mode-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.mode === currentMode);
+      });
     }
 
     // Daraja tugmalarining holatini yangilash
     if (levelTabsEl) {
       const tabBtns = levelTabsEl.querySelectorAll('.level-btn');
       tabBtns.forEach((btn) => {
-        if (btn.dataset.lvl === currentLevelFilter) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
+        btn.classList.toggle('active', btn.dataset.lvl === currentLevelFilter);
       });
     }
 
-    // Mavzularni daraja bo'yicha filtrlash
-    const filtered = (currentLevelFilter === 'all')
-      ? topicsData
-      : topicsData.filter((t) => t.level === currentLevelFilter);
+    if (currentMode === 'reading') {
+      // READING REJIMI
+      if (homeTitleEl) homeTitleEl.textContent = "Matnlarni o'qing. Tushunish darajangizni sinang.";
+      if (homeLeadEl) homeLeadEl.textContent = "Hikoyani diqqat bilan o'qing va matn ostidagi test savollariga javob bering.";
+      if (recsSectionEl) recsSectionEl.classList.add('hidden');
 
-    listEl.innerHTML = filtered.map((t, idx) => {
-      const isDone = Boolean(s.done[t.id]);
-      const numStr = String(idx + 1).padStart(2, '0');
-      const wCount = countWords(t.text);
+      const rStore = store.getReading();
+      const completed = rStore.completed || {};
+      const completedCount = Object.keys(completed).length;
 
-      return `
-        <button class="topic ${isDone ? 'done' : ''}" data-id="${t.id}" type="button">
-          <span class="n">${numStr}</span>
-          <span class="t">${escapeHtml(t.title)}</span>
-          <span class="lvl">${t.level}</span>
-          <span class="m">${wCount} so'z</span>
-        </button>
-      `;
-    }).join('');
+      if (completedCount > 0) {
+        statsEl.textContent = `Siz ${completedCount} ta matnni o'qib, test savollarini yakunladingiz.`;
+      } else {
+        statsEl.textContent = "Barcha hikoyalarda 3 tadan tushunish savollari mavjud.";
+      }
 
-    // Saqlangan yozuvlar ro'yxatini chiqarish
-    renderRecordingsList();
+      const filtered = (currentLevelFilter === 'all')
+        ? readingTopicsData
+        : readingTopicsData.filter((t) => t.level === currentLevelFilter);
+
+      listEl.innerHTML = filtered.map((t, idx) => {
+        const record = completed[t.id];
+        const isDone = Boolean(record);
+        const numStr = String(idx + 1).padStart(2, '0');
+        const wCount = countWords(t.text);
+        const badgeText = isDone
+          ? `${record.correct}/${record.total} to'g'ri`
+          : `${t.questions ? t.questions.length : 3} ta savol`;
+
+        return `
+          <button class="topic ${isDone ? 'done' : ''}" data-id="${t.id}" data-type="reading" type="button">
+            <span class="n">${numStr}</span>
+            <span class="t">${escapeHtml(t.title)}</span>
+            <span class="lvl">${t.level}</span>
+            <span class="m">${wCount} so'z · ${badgeText}</span>
+          </button>
+        `;
+      }).join('');
+    } else {
+      // SPEAKING REJIMI
+      if (homeTitleEl) homeTitleEl.textContent = "Ovoz chiqarib o'qing. Ravon gapirishni o'rganing.";
+      if (homeLeadEl) homeLeadEl.textContent = "Mavzuni tanlang. Matn o'zi sekin yuqoriga suriladi, siz esa uni ovoz chiqarib o'qiysiz.";
+      if (recsSectionEl) recsSectionEl.classList.remove('hidden');
+
+      const s = store.get();
+      const mins = Math.round(s.secs / 60);
+
+      if (s.reads > 0 || mins > 0) {
+        statsEl.textContent = `Siz ${s.reads} marta mashq qildingiz, jami ${mins} daqiqa.`;
+      } else {
+        statsEl.textContent = '';
+      }
+
+      const filtered = (currentLevelFilter === 'all')
+        ? topicsData
+        : topicsData.filter((t) => t.level === currentLevelFilter);
+
+      listEl.innerHTML = filtered.map((t, idx) => {
+        const isDone = Boolean(s.done[t.id]);
+        const numStr = String(idx + 1).padStart(2, '0');
+        const wCount = countWords(t.text);
+
+        return `
+          <button class="topic ${isDone ? 'done' : ''}" data-id="${t.id}" data-type="speaking" type="button">
+            <span class="n">${numStr}</span>
+            <span class="t">${escapeHtml(t.title)}</span>
+            <span class="lvl">${t.level}</span>
+            <span class="m">${wCount} so'z</span>
+          </button>
+        `;
+      }).join('');
+
+      renderRecordingsList();
+    }
   }
 
   if (levelTabsEl) {
@@ -438,11 +548,14 @@
 
   listEl.addEventListener('click', (e) => {
     const btn = e.target.closest('.topic');
-    if (btn) {
-      const id = Number(btn.dataset.id);
-      if (!isNaN(id)) {
-        openTopic(id);
-      }
+    if (!btn) return;
+    const id = Number(btn.dataset.id);
+    if (isNaN(id)) return;
+    const type = btn.dataset.type || currentMode;
+    if (type === 'reading') {
+      openReadingTopic(id);
+    } else {
+      openTopic(id);
     }
   });
 
@@ -953,7 +1066,9 @@
 
   /* ---------- Murakkab so'zlar (Hard Words) ---------- */
   function openWordSheet(el) {
-    pauseScroll();
+    if (!readerEl.classList.contains('hidden')) {
+      pauseScroll();
+    }
     const word = el.dataset.word || el.textContent;
     const uz = el.dataset.uz || '';
 
@@ -979,14 +1094,181 @@
     }
   });
 
+  if (readingTextEl) {
+    readingTextEl.addEventListener('click', (e) => {
+      const hw = e.target.closest('.hw');
+      if (hw) {
+        e.stopPropagation();
+        openWordSheet(hw);
+      }
+    });
+
+    readingTextEl.addEventListener('keydown', (e) => {
+      if (e.target.classList.contains('hw') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        openWordSheet(e.target);
+      }
+    });
+  }
+
   sListenBtn.addEventListener('click', () => {
     speakText(swEl.textContent, 0.8);
   });
 
   sGoBtn.addEventListener('click', () => {
     sheetEl.classList.add('hidden');
-    playScroll();
+    if (!readerEl.classList.contains('hidden')) {
+      playScroll();
+    }
   });
+
+  /* ==========================================================================
+     Reading (O'qish va Comprehension Test) Mantiqi
+     ========================================================================== */
+  let currentReadingTopic = null;
+  let readingAnswers = {};
+
+  function openReadingTopic(id) {
+    const topic = readingTopicsData.find((t) => t.id === id) || readingTopicsData[0];
+    if (!topic) return;
+
+    currentReadingTopic = topic;
+    readingAnswers = {};
+
+    homeEl.classList.add('hidden');
+    readerEl.classList.add('hidden');
+    readingReaderEl.classList.remove('hidden');
+
+    if (rReadingTitleEl) rReadingTitleEl.textContent = topic.title;
+    if (rReadingLvlEl) rReadingLvlEl.textContent = topic.level;
+    const qCount = topic.questions ? topic.questions.length : 3;
+    if (rReadingQCountEl) rReadingQCountEl.textContent = `${qCount} ta savol`;
+
+    if (readingArticleTitleEl) readingArticleTitleEl.textContent = topic.title;
+    const wCount = countWords(topic.text);
+    if (readingMetaLineEl) {
+      readingMetaLineEl.textContent = `${topic.levelName} · ${wCount} so'z · ${qCount} ta savol`;
+    }
+
+    readingTextEl.innerHTML = renderFormattedText(topic.text);
+    renderQuiz();
+
+    const bodyEl = readingReaderEl.querySelector('.reading-body');
+    if (bodyEl) bodyEl.scrollTop = 0;
+  }
+
+  function renderQuiz() {
+    if (!currentReadingTopic || !currentReadingTopic.questions) return;
+    const questions = currentReadingTopic.questions;
+
+    quizResultEl.classList.add('hidden');
+
+    const letters = ['A', 'B', 'C', 'D'];
+
+    quizListEl.innerHTML = questions.map((qObj, qIdx) => {
+      const chosenOpt = readingAnswers[qIdx];
+      const isAnswered = chosenOpt !== undefined;
+      const isCorrect = isAnswered && chosenOpt === qObj.answer;
+
+      let badgeHtml = `<span class="quiz-badge">${qIdx + 1}-savol</span>`;
+      if (isAnswered) {
+        if (isCorrect) {
+          badgeHtml = `<span class="quiz-badge correct">To'g'ri</span>`;
+        } else {
+          badgeHtml = `<span class="quiz-badge wrong">Noto'g'ri</span>`;
+        }
+      }
+
+      const optionsHtml = qObj.options.map((optText, optIdx) => {
+        let optClasses = ['quiz-opt'];
+        if (isAnswered) {
+          if (optIdx === qObj.answer) {
+            optClasses.push('correct');
+          } else if (optIdx === chosenOpt) {
+            optClasses.push('wrong');
+          }
+        }
+
+        return `
+          <button class="${optClasses.join(' ')}" data-q="${qIdx}" data-opt="${optIdx}" ${isAnswered ? 'disabled' : ''} type="button">
+            <span class="quiz-opt-letter">${letters[optIdx] || optIdx + 1}</span>
+            <span class="quiz-opt-text">${escapeHtml(optText)}</span>
+          </button>
+        `;
+      }).join('');
+
+      return `
+        <div class="quiz-card" data-q="${qIdx}">
+          <div class="quiz-card-head">
+            <div class="quiz-q-text">${qIdx + 1}. ${escapeHtml(qObj.q)}</div>
+            ${badgeHtml}
+          </div>
+          <div class="quiz-options">
+            ${optionsHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    checkQuizCompletion();
+  }
+
+  function checkQuizCompletion() {
+    if (!currentReadingTopic || !currentReadingTopic.questions) return;
+    const questions = currentReadingTopic.questions;
+    const totalQ = questions.length;
+    const answeredCount = Object.keys(readingAnswers).length;
+
+    if (answeredCount === totalQ) {
+      let correctCount = 0;
+      questions.forEach((qObj, qIdx) => {
+        if (readingAnswers[qIdx] === qObj.answer) {
+          correctCount++;
+        }
+      });
+
+      quizResultEl.classList.remove('hidden');
+      quizResultScoreEl.textContent = `${correctCount} / ${totalQ} to'g'ri javob`;
+
+      if (correctCount === totalQ) {
+        quizResultMsgEl.textContent = "Ajoyib natija! Matnni to'liq tushundingiz va barcha savollarga to'g'ri javob berdingiz.";
+      } else if (correctCount >= Math.ceil(totalQ / 2)) {
+        quizResultMsgEl.textContent = `Yaxshi natija! Siz ${totalQ} ta savoldan ${correctCount} tasiga to'g'ri javob berdingiz.`;
+      } else {
+        quizResultMsgEl.textContent = "Matnni yana bir bor diqqat bilan o'qib, qayta urinib ko'rishingiz mumkin.";
+      }
+
+      store.saveReadingResult(currentReadingTopic.id, correctCount, totalQ);
+    }
+  }
+
+  quizListEl.addEventListener('click', (e) => {
+    const optBtn = e.target.closest('.quiz-opt');
+    if (!optBtn) return;
+    const qIdx = Number(optBtn.dataset.q);
+    const optIdx = Number(optBtn.dataset.opt);
+    if (isNaN(qIdx) || isNaN(optIdx)) return;
+    if (readingAnswers[qIdx] !== undefined) return;
+
+    readingAnswers[qIdx] = optIdx;
+    renderQuiz();
+  });
+
+  quizRetryBtn.addEventListener('click', () => {
+    readingAnswers = {};
+    renderQuiz();
+    quizSectionEl.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  function exitReading() {
+    readingReaderEl.classList.add('hidden');
+    homeEl.classList.remove('hidden');
+    sheetEl.classList.add('hidden');
+    renderHome();
+  }
+
+  readingBackBtn.addEventListener('click', exitReading);
+  quizFinishBtn.addEventListener('click', exitReading);
 
   /* ---------- Boshqaruv tugmalari va hodisalar ---------- */
   pauseBtn.addEventListener('click', () => {
@@ -1166,6 +1448,18 @@
 
   // Klaviatura tugmalari (Space, strelkalar va 1-4 raqamlar)
   document.addEventListener('keydown', (e) => {
+    // Reading ekrani ochiq bo'lsa
+    if (readingReaderEl && !readingReaderEl.classList.contains('hidden')) {
+      if (e.key === 'Escape') {
+        if (!sheetEl.classList.contains('hidden')) {
+          sheetEl.classList.add('hidden');
+        } else {
+          exitReading();
+        }
+      }
+      return;
+    }
+
     if (readerEl.classList.contains('hidden')) return;
     if (e.target.tagName === 'INPUT') return;
 

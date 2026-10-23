@@ -13,9 +13,15 @@
 
   <!-- Home Screen -->
   <main class="home" id="home">
-    <div class="brand">Speak Fast</div>
-    <h1>Ovoz chiqarib o'qing. Ravon gapirishni o'rganing.</h1>
-    <p class="lead">Mavzuni tanlang. Matn o'zi sekin yuqoriga suriladi, siz esa uni ovoz chiqarib o'qiysiz.</p>
+    <div class="home-top">
+      <div class="brand">Speak Fast</div>
+      <nav class="mode-tabs" id="modeTabs" aria-label="Bo'lim tanlash">
+        <button class="mode-btn active" data-mode="speaking" type="button">Speaking</button>
+        <button class="mode-btn" data-mode="reading" type="button">Reading</button>
+      </nav>
+    </div>
+    <h1 id="homeTitle">Ovoz chiqarib o'qing. Ravon gapirishni o'rganing.</h1>
+    <p class="lead" id="homeLead">Mavzuni tanlang. Matn o'zi sekin yuqoriga suriladi, siz esa uni ovoz chiqarib o'qiysiz.</p>
     <div class="stats" id="stats"></div>
     <div class="level-tabs" id="levelTabs">
       <button class="level-btn active" data-lvl="all" type="button">Barchasi</button>
@@ -35,7 +41,7 @@
     </section>
   </main>
 
-  <!-- Reader Screen -->
+  <!-- Reader Screen (Speaking) -->
   <section class="reader hidden" id="reader" aria-live="polite">
     <div class="top">
       <button class="back" id="back">Mavzular</button>
@@ -58,18 +64,6 @@
     </div>
     
     <div class="overlay hidden" id="overlay"></div>
-
-    <!-- Word Bottom Sheet -->
-    <div class="sheet hidden" id="sheet">
-      <div>
-        <div class="w" id="sw"></div>
-        <div class="u" id="su"></div>
-      </div>
-      <div class="acts">
-        <button class="btn ghost" id="sListen">Eshitish</button>
-        <button class="btn" id="sGo">Davom etish</button>
-      </div>
-    </div>
 
     <!-- Finish Screen -->
     <div class="finish hidden" id="finish">
@@ -122,6 +116,66 @@
       </div>
     </div>
   </section>
+
+  <!-- Reading Screen (Reading Comprehension) -->
+  <section class="reading-reader hidden" id="readingReader" aria-live="polite">
+    <div class="reading-top">
+      <button class="back" id="readingBack">Mavzular</button>
+      <div class="reading-top-meta">
+        <span class="reading-top-title" id="rReadingTitle"></span>
+        <span class="lvl-badge" id="rReadingLvl"></span>
+      </div>
+      <div class="reading-q-badge" id="rReadingBadge">
+        <span id="rReadingQCount">3 ta savol</span>
+      </div>
+    </div>
+
+    <div class="reading-body">
+      <div class="reading-container">
+        <header class="reading-header">
+          <h1 class="reading-title" id="readingArticleTitle"></h1>
+          <div class="reading-meta" id="readingMetaLine"></div>
+        </header>
+
+        <article class="reading-article" id="readingText"></article>
+
+        <hr class="reading-divider">
+
+        <!-- Comprehension Quiz -->
+        <section class="quiz-section" id="quizSection">
+          <div class="quiz-header">
+            <h2 class="quiz-title">Tushunish darajasini tekshirish</h2>
+            <p class="quiz-desc">Matn mazmuni bo'yicha to'g'ri variantni tanlang.</p>
+          </div>
+
+          <div class="quiz-list" id="quizList"></div>
+
+          <div class="quiz-result hidden" id="quizResult">
+            <div class="quiz-result-card">
+              <div class="quiz-result-score" id="quizResultScore"></div>
+              <p class="quiz-result-msg" id="quizResultMsg"></p>
+              <div class="quiz-result-acts">
+                <button class="btn ghost" id="quizRetryBtn" type="button">Qayta ishlash</button>
+                <button class="btn" id="quizFinishBtn" type="button">Mavzularga qaytish</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- Universal Word Bottom Sheet -->
+  <div class="sheet hidden" id="sheet">
+    <div>
+      <div class="w" id="sw"></div>
+      <div class="u" id="su"></div>
+    </div>
+    <div class="acts">
+      <button class="btn ghost" id="sListen">Eshitish</button>
+      <button class="btn" id="sGo">Davom etish</button>
+    </div>
+  </div>
 
   <script src="data.js"></script>
   <script src="script.js"></script>
