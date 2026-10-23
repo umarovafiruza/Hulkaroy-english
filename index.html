@@ -164,8 +164,21 @@
         <!-- Comprehension Quiz -->
         <section class="quiz-section" id="quizSection">
           <div class="quiz-header">
-            <h2 class="quiz-title">Tushunish darajasini tekshirish</h2>
-            <p class="quiz-desc">20 ta savollik bazadan tasodifiy 3 ta savol tanlandi. Matn mazmuni bo'yicha to'g'ri variantni tanlang.</p>
+            <div class="quiz-header-top">
+              <div class="quiz-header-info">
+                <h2 class="quiz-title">Tushunish darajasini tekshirish</h2>
+                <p class="quiz-desc" id="quizDesc">20 ta savollik bazadan tasodifiy 10 ta savol tanlandi.</p>
+              </div>
+              <div class="quiz-count-wrapper" id="quizCountSelector">
+                <span class="quiz-count-label">Savollar soni:</span>
+                <div class="quiz-count-btns">
+                  <button class="quiz-count-btn" data-count="5" type="button">5 ta</button>
+                  <button class="quiz-count-btn active" data-count="10" type="button">10 ta</button>
+                  <button class="quiz-count-btn" data-count="15" type="button">15 ta</button>
+                  <button class="quiz-count-btn" data-count="20" type="button">20 ta (Barchasi)</button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="quiz-list" id="quizList"></div>

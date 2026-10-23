@@ -187,6 +187,18 @@
         localStorage.setItem('sf_reading_fontsize', String(s));
       } catch (e) {}
     },
+    getReadingQuizCount() {
+      try {
+        const val = Number(localStorage.getItem('sf_quiz_count'));
+        if ([5, 10, 15, 20].includes(val)) return val;
+      } catch (e) {}
+      return 10;
+    },
+    setReadingQuizCount(c) {
+      try {
+        localStorage.setItem('sf_quiz_count', String(c));
+      } catch (e) {}
+    },
     saveReadingWpm(wpm) {
       try {
         localStorage.setItem('sf_reading_last_wpm', String(wpm));
@@ -553,7 +565,7 @@
       } else if (lastWpm > 0) {
         statsText = `Oxirgi o'qish tezligingiz: ${lastWpm} so'z/daqiqa.`;
       } else {
-        statsText = "Jami 300 ta savol bazasi: har bir mashqda tasodifiy 3 ta yangi savol beriladi.";
+        statsText = "Jami 300 ta savol bazasi: har bir testda 10 tadan 20 tagacha tasodifiy savollar.";
       }
       statsEl.textContent = statsText;
 
@@ -569,7 +581,7 @@
         const qCount = t.questions ? t.questions.length : 20;
         const badgeText = isDone
           ? `${record.correct}/${record.total} to'g'ri`
-          : `${qCount} savol (3 random)`;
+          : `${qCount} savol (10+ test)`;
 
         return `
           <button class="topic ${isDone ? 'done' : ''}" data-id="${t.id}" data-type="reading" type="button">
@@ -1298,6 +1310,7 @@
      ========================================================================== */
   let currentReadingTopic = null;
   let activeReadingQuestions = [];
+  let currentQuizQCount = store.getReadingQuizCount();
   let readingAnswers = {};
   let readingStartTime = 0;
 
@@ -1346,13 +1359,33 @@
     }
   }
 
+  function updateQuizCountButtons() {
+    const btns = document.querySelectorAll('.quiz-count-btn');
+    btns.forEach((b) => {
+      const c = Number(b.dataset.count);
+      b.classList.toggle('active', c === currentQuizQCount);
+    });
+  }
+
+  function updateQuizDesc() {
+    const descEl = $('quizDesc');
+    if (descEl) {
+      const totalBank = (currentReadingTopic && currentReadingTopic.questions) ? currentReadingTopic.questions.length : 20;
+      if (currentQuizQCount >= totalBank) {
+        descEl.textContent = `Mavzudagi barcha ${totalBank} ta savol tasodifiy tartibda berildi.`;
+      } else {
+        descEl.textContent = `20 ta savollik bazadan tasodifiy ${currentQuizQCount} ta savol tanlandi.`;
+      }
+    }
+  }
+
   function openReadingTopic(id) {
     const topic = readingTopicsData.find((t) => t.id === id) || readingTopicsData[0];
     if (!topic) return;
 
     currentReadingTopic = topic;
     readingAnswers = {};
-    activeReadingQuestions = sampleRandomQuestions(topic.questions, 3);
+    activeReadingQuestions = sampleRandomQuestions(topic.questions, currentQuizQCount);
 
     homeEl.classList.add('hidden');
     readerEl.classList.add('hidden');
@@ -1368,6 +1401,9 @@
     if (readingMetaLineEl) {
       readingMetaLineEl.textContent = `${topic.levelName} · ${wCount} so'z · ${totalBank} ta savoldan tasodifiy ${sessionCount} tasi`;
     }
+
+    updateQuizCountButtons();
+    updateQuizDesc();
 
     readingTextEl.innerHTML = renderFormattedText(topic.text);
     applyReadingFontSize(currentReadingFontSize);
@@ -1490,11 +1526,36 @@
   quizRetryBtn.addEventListener('click', () => {
     readingAnswers = {};
     if (currentReadingTopic && currentReadingTopic.questions) {
-      activeReadingQuestions = sampleRandomQuestions(currentReadingTopic.questions, 3);
+      activeReadingQuestions = sampleRandomQuestions(currentReadingTopic.questions, currentQuizQCount);
     }
     renderQuiz();
     quizSectionEl.scrollIntoView({ behavior: 'smooth' });
   });
+
+  const quizCountSelectorEl = $('quizCountSelector');
+  if (quizCountSelectorEl) {
+    quizCountSelectorEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.quiz-count-btn');
+      if (!btn) return;
+      const count = Number(btn.dataset.count);
+      if (!count || count === currentQuizQCount) return;
+      currentQuizQCount = count;
+      store.setReadingQuizCount(count);
+      updateQuizCountButtons();
+      updateQuizDesc();
+      readingAnswers = {};
+      if (currentReadingTopic && currentReadingTopic.questions) {
+        activeReadingQuestions = sampleRandomQuestions(currentReadingTopic.questions, currentQuizQCount);
+        const wCount = countWords(currentReadingTopic.text);
+        const totalBank = currentReadingTopic.questions.length;
+        const sessionCount = activeReadingQuestions.length;
+        if (readingMetaLineEl) {
+          readingMetaLineEl.textContent = `${currentReadingTopic.levelName} · ${wCount} so'z · ${totalBank} ta savoldan tasodifiy ${sessionCount} tasi`;
+        }
+      }
+      renderQuiz();
+    });
+  }
 
   if (readingFinishReadBtn) {
     readingFinishReadBtn.addEventListener('click', () => {

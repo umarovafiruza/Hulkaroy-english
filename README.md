@@ -17,7 +17,7 @@ Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, 
 ### 2. Reading Bo'limi (O'qib tushunish va Tahlil)
 - **Hikoyalar va maqolalar**: A1, A2, B1 darajalarida 15 ta alohida qiziqarli hikoyalar.
 - **300 ta Savoldan iborat Katta Baza**: Har bir matnda 20 tadan, jami **300 ta comprehension savollari**.
-- **Tasodifiy (Random) Savollar Generatori**: Har bir mashg'ulotda yoki "Qayta ishlash" tugmasi bosilganda 20 talik bazadan tasodifiy 3 ta yangi savol tanlab beriladi. Bu orqali foydalanuvchi bir matn ustida ko'p marotaba turli xil savollarga javob berib, tushunish darajasini chuqurlashtirishi mumkin.
+- **Moslashuvchan Savollar Generatori (10 ta, 15 ta, 20 ta)**: Har bir mashg'ulotda standart 10 ta savol beriladi. Foydalanuvchi o'z xohishiga ko'ra test boshidagi selektor orqali 5 ta, 10 ta, 15 ta yoki barcha 20 ta savolni tanlab yechishi mumkin. "Qayta ishlash" bosilganda bazadan yangi tasodifiy savollar generatsiya qilinadi.
 - **O'qish tezligi (WPM) va Taymer**: Foydalanuvchi matnni o'qish vaqtini o'lchaydi va "O'qib bo'ldim" tugmasini bosganda uning shaxsiy WPM (daqiqa/so'z) tezligini avtomatik hisoblab ko'rsatadi.
 - **Shaxsiy Lug'at Daftari (Saved Vocabulary)**: Notanish so'zni bosganda "Saqlash" tugmasi orqali o'z shaxsiy lug'atiga qo'shish, Bosh sahifada saqlangan so'zlarni tinglash va o'rganish imkoniyati.
 - **Shrift o'lchamini sozlash (`A−` va `A+`)**: O'qish qulayligi uchun matn shriftini kattalashtirish yoki kichiklashtirish.
