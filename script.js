@@ -70,10 +70,15 @@
   const readingBackBtn = $('readingBack');
   const rReadingTitleEl = $('rReadingTitle');
   const rReadingLvlEl = $('rReadingLvl');
-  const rReadingQCountEl = $('rReadingQCount');
+  const readingTimerEl = $('readingTimer');
+  const fontSizeDownBtn = $('fontSizeDown');
+  const fontSizeUpBtn = $('fontSizeUp');
+  const readingTtsBtn = $('readingTtsBtn');
   const readingArticleTitleEl = $('readingArticleTitle');
   const readingMetaLineEl = $('readingMetaLine');
   const readingTextEl = $('readingText');
+  const readingFinishReadBtn = $('readingFinishReadBtn');
+  const readingSpeedBadgeEl = $('readingSpeedBadge');
   const quizSectionEl = $('quizSection');
   const quizListEl = $('quizList');
   const quizResultEl = $('quizResult');
@@ -81,6 +86,13 @@
   const quizResultMsgEl = $('quizResultMsg');
   const quizRetryBtn = $('quizRetryBtn');
   const quizFinishBtn = $('quizFinishBtn');
+  const sSaveBtn = $('sSave');
+
+  /* Lug'at (Vocabulary) DOM elementlari */
+  const vocabSectionEl = $('vocabSection');
+  const vocabCountEl = $('vocabCount');
+  const vocabEmptyEl = $('vocabEmpty');
+  const vocabListEl = $('vocabList');
 
   /* ---------- Ma'lumotlar va Saqlash (LocalStorage) ---------- */
   const topicsData = (typeof TOPICS !== 'undefined') ? TOPICS : (window.TOPICS || []);
@@ -125,6 +137,68 @@
         data.completed[id] = { correct, total, ts: Date.now() };
         localStorage.setItem('sf_reading', JSON.stringify(data));
       } catch (e) {}
+    },
+    getVocab() {
+      try {
+        const raw = localStorage.getItem('sf_vocab');
+        if (raw) {
+          const arr = JSON.parse(raw);
+          if (Array.isArray(arr)) return arr;
+        }
+      } catch (e) {}
+      return [];
+    },
+    saveVocab(word, uz, topicTitle = '') {
+      let list = this.getVocab();
+      const existing = list.find((v) => v.word.toLowerCase() === word.toLowerCase());
+      if (existing) return list;
+      list.unshift({
+        id: Date.now() + Math.random().toString(36).slice(2, 6),
+        word,
+        uz,
+        topicTitle,
+        date: formatUzDate(new Date())
+      });
+      try {
+        localStorage.setItem('sf_vocab', JSON.stringify(list));
+      } catch (e) {}
+      return list;
+    },
+    deleteVocab(id) {
+      let list = this.getVocab().filter((v) => v.id !== id);
+      try {
+        localStorage.setItem('sf_vocab', JSON.stringify(list));
+      } catch (e) {}
+      return list;
+    },
+    isVocabSaved(word) {
+      if (!word) return false;
+      const list = this.getVocab();
+      return list.some((v) => v.word.toLowerCase() === word.toLowerCase());
+    },
+    getReadingFontSize() {
+      try {
+        const s = Number(localStorage.getItem('sf_reading_fontsize'));
+        if (s >= 14 && s <= 28) return s;
+      } catch (e) {}
+      return 20;
+    },
+    setReadingFontSize(s) {
+      try {
+        localStorage.setItem('sf_reading_fontsize', String(s));
+      } catch (e) {}
+    },
+    saveReadingWpm(wpm) {
+      try {
+        localStorage.setItem('sf_reading_last_wpm', String(wpm));
+      } catch (e) {}
+    },
+    getReadingWpm() {
+      try {
+        return Number(localStorage.getItem('sf_reading_last_wpm')) || 0;
+      } catch (e) {
+        return 0;
+      }
     },
     getMode() {
       try {
@@ -464,16 +538,25 @@
       if (homeTitleEl) homeTitleEl.textContent = "Matnlarni o'qing. Tushunish darajangizni sinang.";
       if (homeLeadEl) homeLeadEl.textContent = "Hikoyani diqqat bilan o'qing va matn ostidagi test savollariga javob bering.";
       if (recsSectionEl) recsSectionEl.classList.add('hidden');
+      if (vocabSectionEl) vocabSectionEl.classList.remove('hidden');
 
       const rStore = store.getReading();
       const completed = rStore.completed || {};
       const completedCount = Object.keys(completed).length;
+      const lastWpm = store.getReadingWpm();
 
+      let statsText = '';
       if (completedCount > 0) {
-        statsEl.textContent = `Siz ${completedCount} ta matnni o'qib, test savollarini yakunladingiz.`;
+        statsText = `Siz ${completedCount} ta matnni o'qib, test savollarini yakunladingiz.`;
+        if (lastWpm > 0) {
+          statsText += ` · Oxirgi tezlik: ${lastWpm} so'z/daqiqa`;
+        }
+      } else if (lastWpm > 0) {
+        statsText = `Oxirgi o'qish tezligingiz: ${lastWpm} so'z/daqiqa.`;
       } else {
-        statsEl.textContent = "Barcha hikoyalarda 3 tadan tushunish savollari mavjud.";
+        statsText = "Barcha hikoyalarda 3 tadan tushunish savollari mavjud.";
       }
+      statsEl.textContent = statsText;
 
       const filtered = (currentLevelFilter === 'all')
         ? readingTopicsData
@@ -497,11 +580,14 @@
           </button>
         `;
       }).join('');
+
+      renderVocabList();
     } else {
       // SPEAKING REJIMI
       if (homeTitleEl) homeTitleEl.textContent = "Ovoz chiqarib o'qing. Ravon gapirishni o'rganing.";
       if (homeLeadEl) homeLeadEl.textContent = "Mavzuni tanlang. Matn o'zi sekin yuqoriga suriladi, siz esa uni ovoz chiqarib o'qiysiz.";
       if (recsSectionEl) recsSectionEl.classList.remove('hidden');
+      if (vocabSectionEl) vocabSectionEl.classList.add('hidden');
 
       const s = store.get();
       const mins = Math.round(s.secs / 60);
@@ -533,6 +619,59 @@
 
       renderRecordingsList();
     }
+  }
+
+  /* ---------- Shaxsiy Lug'at (Vocabulary List) ---------- */
+  function renderVocabList() {
+    if (!vocabSectionEl) return;
+    const list = store.getVocab();
+    if (vocabCountEl) {
+      vocabCountEl.textContent = `${list.length} ta so'z`;
+    }
+
+    if (list.length === 0) {
+      if (vocabEmptyEl) vocabEmptyEl.classList.remove('hidden');
+      if (vocabListEl) vocabListEl.innerHTML = '';
+      return;
+    }
+
+    if (vocabEmptyEl) vocabEmptyEl.classList.add('hidden');
+    if (vocabListEl) {
+      vocabListEl.innerHTML = list.map((item) => {
+        return `
+          <div class="vocab-card" data-id="${item.id}" data-word="${escapeHtml(item.word)}">
+            <div class="vocab-card-main">
+              <div class="vocab-word">${escapeHtml(item.word)}</div>
+              <div class="vocab-uz">${escapeHtml(item.uz)}</div>
+              <div class="vocab-meta">${escapeHtml(item.topicTitle || '')} · ${item.date || ''}</div>
+            </div>
+            <div class="vocab-acts">
+              <button class="btn-vocab-play" type="button" data-act="play">Eshitish</button>
+              <button class="btn-vocab-del" type="button" data-act="del">O'chirish</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  if (vocabListEl) {
+    vocabListEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-act]');
+      if (!btn) return;
+      const card = btn.closest('.vocab-card');
+      if (!card) return;
+      const id = card.dataset.id;
+      const word = card.dataset.word;
+      const act = btn.dataset.act;
+
+      if (act === 'play') {
+        speakText(word, 0.8);
+      } else if (act === 'del') {
+        store.deleteVocab(id);
+        renderVocabList();
+      }
+    });
   }
 
   if (levelTabsEl) {
@@ -1074,8 +1213,18 @@
 
     swEl.textContent = word;
     suEl.textContent = uz;
-    sheetEl.classList.remove('hidden');
 
+    if (sSaveBtn) {
+      if (store.isVocabSaved(word)) {
+        sSaveBtn.textContent = 'Saqlangan';
+        sSaveBtn.classList.add('active');
+      } else {
+        sSaveBtn.textContent = 'Saqlash';
+        sSaveBtn.classList.remove('active');
+      }
+    }
+
+    sheetEl.classList.remove('hidden');
     speakText(word, 0.8);
   }
 
@@ -1115,6 +1264,28 @@
     speakText(swEl.textContent, 0.8);
   });
 
+  if (sSaveBtn) {
+    sSaveBtn.addEventListener('click', () => {
+      const word = swEl.textContent.trim();
+      const uz = suEl.textContent.trim();
+      if (!word) return;
+
+      if (store.isVocabSaved(word)) {
+        const list = store.getVocab();
+        const item = list.find((v) => v.word.toLowerCase() === word.toLowerCase());
+        if (item) store.deleteVocab(item.id);
+        sSaveBtn.textContent = 'Saqlash';
+        sSaveBtn.classList.remove('active');
+      } else {
+        const topicTitle = currentReadingTopic ? currentReadingTopic.title : '';
+        store.saveVocab(word, uz, topicTitle);
+        sSaveBtn.textContent = 'Saqlangan';
+        sSaveBtn.classList.add('active');
+      }
+      renderVocabList();
+    });
+  }
+
   sGoBtn.addEventListener('click', () => {
     sheetEl.classList.add('hidden');
     if (!readerEl.classList.contains('hidden')) {
@@ -1123,10 +1294,111 @@
   });
 
   /* ==========================================================================
-     Reading (O'qish va Comprehension Test) Mantiqi
+     Reading (O'qish, Tezlik, Audio va Comprehension Test) Mantiqi
      ========================================================================== */
   let currentReadingTopic = null;
   let readingAnswers = {};
+  let readingStartTime = 0;
+  let readingTimerInterval = null;
+  let readingTimerSecs = 0;
+  let readingTtsActive = false;
+  let readingTtsUtterance = null;
+  let currentReadingFontSize = store.getReadingFontSize();
+
+  function applyReadingFontSize(size) {
+    currentReadingFontSize = size;
+    store.setReadingFontSize(size);
+    if (readingTextEl) {
+      readingTextEl.style.fontSize = `${size}px`;
+    }
+  }
+
+  function startReadingTimer() {
+    stopReadingTimer();
+    readingStartTime = Date.now();
+    readingTimerSecs = 0;
+    if (readingTimerEl) readingTimerEl.textContent = '00:00';
+    if (readingFinishReadBtn) readingFinishReadBtn.classList.remove('hidden');
+    if (readingSpeedBadgeEl) readingSpeedBadgeEl.classList.add('hidden');
+
+    readingTimerInterval = setInterval(() => {
+      readingTimerSecs = Math.floor((Date.now() - readingStartTime) / 1000);
+      const mm = String(Math.floor(readingTimerSecs / 60)).padStart(2, '0');
+      const ss = String(readingTimerSecs % 60).padStart(2, '0');
+      if (readingTimerEl) readingTimerEl.textContent = `${mm}:${ss}`;
+    }, 1000);
+  }
+
+  function stopReadingTimer() {
+    if (readingTimerInterval) {
+      clearInterval(readingTimerInterval);
+      readingTimerInterval = null;
+    }
+  }
+
+  function stopReadingTts() {
+    if (tts && readingTtsActive) {
+      tts.cancel();
+    }
+    readingTtsActive = false;
+    if (readingTtsBtn) {
+      readingTtsBtn.textContent = 'Eshitish';
+      readingTtsBtn.classList.remove('active');
+    }
+    if (readingTextEl) {
+      readingTextEl.querySelectorAll('.tts-active').forEach((el) => el.classList.remove('tts-active'));
+    }
+  }
+
+  function startReadingTts() {
+    if (!tts || !currentReadingTopic) return;
+    stopReadingTts();
+
+    const paragraphs = readingTextEl.querySelectorAll('p');
+    if (!paragraphs || paragraphs.length === 0) return;
+
+    readingTtsActive = true;
+    if (readingTtsBtn) {
+      readingTtsBtn.textContent = "To'xtatish";
+      readingTtsBtn.classList.add('active');
+    }
+
+    let pIndex = 0;
+
+    function speakNextParagraph() {
+      if (!readingTtsActive || pIndex >= paragraphs.length) {
+        stopReadingTts();
+        return;
+      }
+
+      paragraphs.forEach((p, idx) => {
+        p.classList.toggle('tts-active', idx === pIndex);
+      });
+
+      const text = paragraphs[pIndex].textContent;
+      readingTtsUtterance = new SpeechSynthesisUtterance(text);
+      readingTtsUtterance.lang = 'en-US';
+      readingTtsUtterance.rate = 0.92;
+
+      const voices = tts.getVoices();
+      const engVoice = voices.find((v) => v.lang.startsWith('en')) || null;
+      if (engVoice) readingTtsUtterance.voice = engVoice;
+
+      readingTtsUtterance.onend = () => {
+        if (!readingTtsActive) return;
+        pIndex++;
+        speakNextParagraph();
+      };
+
+      readingTtsUtterance.onerror = () => {
+        stopReadingTts();
+      };
+
+      tts.speak(readingTtsUtterance);
+    }
+
+    speakNextParagraph();
+  }
 
   function openReadingTopic(id) {
     const topic = readingTopicsData.find((t) => t.id === id) || readingTopicsData[0];
@@ -1134,6 +1406,7 @@
 
     currentReadingTopic = topic;
     readingAnswers = {};
+    stopReadingTts();
 
     homeEl.classList.add('hidden');
     readerEl.classList.add('hidden');
@@ -1141,16 +1414,18 @@
 
     if (rReadingTitleEl) rReadingTitleEl.textContent = topic.title;
     if (rReadingLvlEl) rReadingLvlEl.textContent = topic.level;
-    const qCount = topic.questions ? topic.questions.length : 3;
-    if (rReadingQCountEl) rReadingQCountEl.textContent = `${qCount} ta savol`;
 
     if (readingArticleTitleEl) readingArticleTitleEl.textContent = topic.title;
     const wCount = countWords(topic.text);
+    const qCount = topic.questions ? topic.questions.length : 3;
     if (readingMetaLineEl) {
       readingMetaLineEl.textContent = `${topic.levelName} · ${wCount} so'z · ${qCount} ta savol`;
     }
 
     readingTextEl.innerHTML = renderFormattedText(topic.text);
+    applyReadingFontSize(currentReadingFontSize);
+
+    startReadingTimer();
     renderQuiz();
 
     const bodyEl = readingReaderEl.querySelector('.reading-body');
@@ -1197,6 +1472,16 @@
         `;
       }).join('');
 
+      let evidenceHtml = '';
+      if (isAnswered && qObj.evidence) {
+        evidenceHtml = `
+          <div class="quiz-evidence">
+            <span class="quiz-evidence-label">Matndagi isbot:</span>
+            <span class="quiz-evidence-text">"${escapeHtml(qObj.evidence)}"</span>
+          </div>
+        `;
+      }
+
       return `
         <div class="quiz-card" data-q="${qIdx}">
           <div class="quiz-card-head">
@@ -1206,6 +1491,7 @@
           <div class="quiz-options">
             ${optionsHtml}
           </div>
+          ${evidenceHtml}
         </div>
       `;
     }).join('');
@@ -1260,7 +1546,61 @@
     quizSectionEl.scrollIntoView({ behavior: 'smooth' });
   });
 
+  if (readingFinishReadBtn) {
+    readingFinishReadBtn.addEventListener('click', () => {
+      stopReadingTimer();
+      const elapsedSec = Math.max(1, readingTimerSecs);
+      const wCount = currentReadingTopic ? countWords(currentReadingTopic.text) : 100;
+      const wpm = Math.round((wCount / elapsedSec) * 60);
+
+      store.saveReadingWpm(wpm);
+
+      const mins = Math.floor(elapsedSec / 60);
+      const secs = elapsedSec % 60;
+      let timeStr = `${elapsedSec} soniya`;
+      if (mins > 0) {
+        timeStr = `${mins} daqiqa ${secs} soniya`;
+      }
+
+      if (readingSpeedBadgeEl) {
+        readingSpeedBadgeEl.textContent = `Tezlik: ${wpm} so'z/daqiqa (${timeStr})`;
+        readingSpeedBadgeEl.classList.remove('hidden');
+      }
+      readingFinishReadBtn.classList.add('hidden');
+
+      if (quizSectionEl) {
+        quizSectionEl.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
+  if (fontSizeDownBtn) {
+    fontSizeDownBtn.addEventListener('click', () => {
+      const newSize = Math.max(15, currentReadingFontSize - 2);
+      applyReadingFontSize(newSize);
+    });
+  }
+
+  if (fontSizeUpBtn) {
+    fontSizeUpBtn.addEventListener('click', () => {
+      const newSize = Math.min(26, currentReadingFontSize + 2);
+      applyReadingFontSize(newSize);
+    });
+  }
+
+  if (readingTtsBtn) {
+    readingTtsBtn.addEventListener('click', () => {
+      if (readingTtsActive) {
+        stopReadingTts();
+      } else {
+        startReadingTts();
+      }
+    });
+  }
+
   function exitReading() {
+    stopReadingTimer();
+    stopReadingTts();
     readingReaderEl.classList.add('hidden');
     homeEl.classList.remove('hidden');
     sheetEl.classList.add('hidden');

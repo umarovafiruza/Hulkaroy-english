@@ -201,7 +201,8 @@ Tom brought a small bowl of warm milk and placed it gently on the grass. The kit
           "Under his bed in the bedroom",
           "At the bus stop on the street"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "He heard a very quiet sound behind the flowers in his garden and saw a tiny white kitten."
       },
       {
         q: "What did Tom give to the kitten?",
@@ -210,7 +211,8 @@ Tom brought a small bowl of warm milk and placed it gently on the grass. The kit
           "A small bowl of warm milk",
           "A bowl of fresh cold water"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "Tom brought a small bowl of warm milk and placed it gently on the grass."
       },
       {
         q: "What name did Tom give to his new pet?",
@@ -219,7 +221,8 @@ Tom brought a small bowl of warm milk and placed it gently on the grass. The kit
           "Max",
           "Snow"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "Tom decided to adopt the sweet animal and named her Snow."
       }
     ]
   },
@@ -241,7 +244,8 @@ In the evening, they watched the orange sunset together. It was a very relaxing 
           "Hot soup, rice, and black tea",
           "Pizza, chocolate cake, and soda"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "Emma and her parents prepared a large basket with sandwiches, red apples, and orange juice."
       },
       {
         q: "Where did the family go for their picnic?",
@@ -250,7 +254,8 @@ In the evening, they watched the orange sunset together. It was a very relaxing 
           "To a quiet lake outside the city",
           "To a cinema in the city center"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "They drove their car to a peaceful lake outside the city."
       },
       {
         q: "What did Emma and her father do near the lake?",
@@ -259,7 +264,8 @@ In the evening, they watched the orange sunset together. It was a very relaxing 
           "They swam across the lake",
           "They threw a ball together"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "Emma and her father threw a ball while her mother read an interesting magazine."
       }
     ]
   },
@@ -281,7 +287,8 @@ The librarian smiled and showed him a large book with pictures of lions and elep
           "Only on Saturday mornings",
           "Once every month"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "Every Wednesday afternoon, he walks to the town library after school."
       },
       {
         q: "What kind of book was David looking for?",
@@ -290,7 +297,8 @@ The librarian smiled and showed him a large book with pictures of lions and elep
           "A book about wild African animals",
           "A storybook about cooking food"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "David asked the kind librarian for a book about wild African animals."
       },
       {
         q: "What did the librarian do?",
@@ -299,7 +307,8 @@ The librarian smiled and showed him a large book with pictures of lions and elep
           "Asked him to return tomorrow",
           "Smiled and showed him a book with lions and elephants"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "The librarian smiled and showed him a large book with pictures of lions and elephants."
       }
     ]
   },
@@ -321,7 +330,8 @@ The baker always smiles and greets everyone warmly. Starting the morning with fr
           "At seven in the morning",
           "At nine in the morning"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "The baker wakes up at four in the morning to prepare fresh dough."
       },
       {
         q: "What can be smelled from the bakery in the morning?",
@@ -330,7 +340,8 @@ The baker always smiles and greets everyone warmly. Starting the morning with fr
           "Sweet vanilla and warm cinnamon",
           "Fresh coffee and chocolate ice cream"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "When I open my bedroom window, I can smell sweet vanilla and warm cinnamon."
       },
       {
         q: "Why do neighbors line up at eight o'clock?",
@@ -339,7 +350,8 @@ The baker always smiles and greets everyone warmly. Starting the morning with fr
           "To drink free milk",
           "To wait for the morning bus"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "At eight o'clock, neighbors line up to buy hot bread and fruit pies."
       }
     ]
   },
@@ -361,7 +373,8 @@ After three attempts, Lucas found his {balance|muvozanat} and pedaled all the wa
           "His grandfather",
           "His best friend"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "Lucas received a wonderful gift from his grandfather: a bright blue bicycle."
       },
       {
         q: "What did his grandfather do to help him?",
@@ -370,7 +383,8 @@ After three attempts, Lucas found his {balance|muvozanat} and pedaled all the wa
           "He held the back of the seat and walked patiently",
           "He showed him an instructional video"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "His grandfather held the back of the seat and walked patiently behind him in the yard."
       },
       {
         q: "How did Lucas feel when he pedaled to the gate alone?",
@@ -379,7 +393,8 @@ After three attempts, Lucas found his {balance|muvozanat} and pedaled all the wa
           "Angry and confused",
           "Proud and excited"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "He felt proud and laughed with pure excitement."
       }
     ]
   },
@@ -403,7 +418,8 @@ Later in the afternoon, Malika visited the lively Siab Bazaar. She bought sweet 
           "By an intercity bus",
           "In her own car"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "Malika took the high-speed train from Tashkent to Samarkand for a weekend trip."
       },
       {
         q: "What did Malika do at Registan square?",
@@ -412,7 +428,8 @@ Later in the afternoon, Malika visited the lively Siab Bazaar. She bought sweet 
           "She admired the blue tiles and listened to an elderly guide",
           "She attended an evening music festival"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "The majestic blue tiles glittered, she took photos and listened to an elderly guide explaining the Silk Road history."
       },
       {
         q: "What items did she purchase at Siab Bazaar?",
@@ -421,7 +438,8 @@ Later in the afternoon, Malika visited the lively Siab Bazaar. She bought sweet 
           "Silk scarves and leather shoes",
           "Dried apricots, fresh almonds, and traditional bread"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "She bought sweet dried apricots, fresh almonds, and traditional round bread to bring back to her family."
       }
     ]
   },
@@ -443,7 +461,8 @@ The school judges were {impressed|hayratda} by their creativity and environmenta
           "A robot that cleans the school playground",
           "A miniature wind turbine for lighting classrooms"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "Kevin and his classmate Maya decided to build a solar water heater using recycled plastic bottles and black copper pipes."
       },
       {
         q: "Where did they test their invention for two weeks?",
@@ -452,7 +471,8 @@ The school judges were {impressed|hayratda} by their creativity and environmenta
           "On the school rooftop",
           "In Kevin's private garage"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "They spent two weeks testing their model on the school rooftop."
       },
       {
         q: "What award did the judges give to Kevin and Maya?",
@@ -461,7 +481,8 @@ The school judges were {impressed|hayratda} by their creativity and environmenta
           "A certificate of attendance",
           "First prize for the best sustainable project"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "Kevin and Maya were awarded the first prize for the best sustainable project."
       }
     ]
   },
@@ -483,7 +504,8 @@ When his friends tasted the warm soup, they praised his cooking and asked for a 
           "He wanted to work as a professional chef in a restaurant",
           "His doctor told him to stop eating vegetables"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "He realized that cooking fresh meals at home was both healthier and much more economical."
       },
       {
         q: "What recipe did Alex choose to prepare for his friends?",
@@ -492,7 +514,8 @@ When his friends tasted the warm soup, they praised his cooking and asked for a 
           "A spicy Mexican chicken taco recipe",
           "An Italian baked lasagna recipe"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "He decided to prepare a traditional vegetable soup from his grandmother's old recipe book."
       },
       {
         q: "How did Alex's friends react to the soup?",
@@ -501,7 +524,8 @@ When his friends tasted the warm soup, they praised his cooking and asked for a 
           "They praised his cooking and asked for a second bowl",
           "They suggested ordering pizza instead"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "When his friends tasted the warm soup, they praised his cooking and asked for a second bowl."
       }
     ]
   },
@@ -523,7 +547,8 @@ An elderly traveler sitting opposite Oliver shared fresh grapes and told fascina
           "Six hours",
           "Twelve hours"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "Last month, Oliver took a six-hour journey across the northern countryside to visit his cousin."
       },
       {
         q: "What did Oliver do during the trip instead of using his phone?",
@@ -532,7 +557,8 @@ An elderly traveler sitting opposite Oliver shared fresh grapes and told fascina
           "He slept through the entire journey",
           "He played video games on his laptop"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "Instead of browsing social media on his smartphone, he sat beside the window with a notebook."
       },
       {
         q: "What did the elderly traveler share with Oliver?",
@@ -541,7 +567,8 @@ An elderly traveler sitting opposite Oliver shared fresh grapes and told fascina
           "Fresh grapes and historical stories about the railway",
           "A map of the northern mountains"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "An elderly traveler sitting opposite Oliver shared fresh grapes and told fascinating stories."
       }
     ]
   },
@@ -563,7 +590,8 @@ A retired gardener named Mr. Harris taught the children how to compress the soil
           "An annual tree planting greening initiative",
           "A musical concert for local charities"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "Neighbors in the Oakridge district gathered at the community park for an annual greening initiative."
       },
       {
         q: "What kinds of saplings were planted along the walking path?",
@@ -572,7 +600,8 @@ A retired gardener named Mr. Harris taught the children how to compress the soil
           "Apple and lemon trees",
           "Tall pine and palm trees"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "They dug twenty deep holes along the gravel walking path and planted young cherry and maple saplings."
       },
       {
         q: "What did Mr. Harris teach the children?",
@@ -581,7 +610,8 @@ A retired gardener named Mr. Harris taught the children how to compress the soil
           "How to paint the garden benches",
           "How to compress the soil and apply organic fertilizer"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "Mr. Harris taught the children how to compress the soil firmly around the roots and apply organic fertilizer."
       }
     ]
   },
@@ -605,7 +635,8 @@ The initial hours were surprisingly challenging, filled with phantom vibrations 
           "Constant notifications and feeds deteriorated his attention span",
           "His university professors banned all electronic devices"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "Constant notifications deteriorated his attention span, making it difficult to read without checking his phone."
       },
       {
         q: "What was Daniel's experience during the first few hours?",
@@ -614,7 +645,8 @@ The initial hours were surprisingly challenging, filled with phantom vibrations 
           "He felt phantom vibrations and a restless urge to scroll",
           "He felt completely peaceful from the very first minute"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "The initial hours were surprisingly challenging, filled with phantom vibrations and a restless urge to scroll."
       },
       {
         q: "What did Daniel achieve by the end of his weekend detox?",
@@ -623,7 +655,8 @@ The initial hours were surprisingly challenging, filled with phantom vibrations 
           "He decided to sell his smartphone permanently",
           "He failed the challenge after only three hours"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "By Sunday morning, he finished an entire novel, took a long solitary hike, and regained deep focus."
       }
     ]
   },
@@ -645,7 +678,8 @@ Beyond tangible ecological benefits, rooftop gardens offer office workers and re
           "Scarcity of green spaces, high temperatures, and urban food access",
           "A shortage of parking spaces in city centers"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "To combat rising temperatures and food insecurity, innovative architects transform barren rooftops."
       },
       {
         q: "How does the layer of rooftop vegetation affect building energy consumption?",
@@ -654,7 +688,8 @@ Beyond tangible ecological benefits, rooftop gardens offer office workers and re
           "It acts as a thermal insulator, cutting AC energy usage by up to 20%",
           "It has no measurable effect on indoor temperature"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "The layer of vegetation acts as a natural thermal insulator, reducing AC consumption during summer by up to 20%."
       },
       {
         q: "What do community volunteers do with the fresh harvest?",
@@ -663,7 +698,8 @@ Beyond tangible ecological benefits, rooftop gardens offer office workers and re
           "They export the organic vegetables to foreign countries",
           "They distribute fresh harvests to local community food banks"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "Community members volunteer weekly to cultivate crops and distribute fresh harvests to local food banks."
       }
     ]
   },
@@ -685,7 +721,8 @@ After examining the central pendulum, Arthur discovered that a tiny bent cog had
           "For over thirty years",
           "For more than a century"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "A medieval stone clock tower whose bronze bells had remained silent for over thirty years."
       },
       {
         q: "What was the actual cause of the clock's failure?",
@@ -694,7 +731,8 @@ After examining the central pendulum, Arthur discovered that a tiny bent cog had
           "A lightning strike that melted the bronze bells",
           "A tiny bent cog that locked the escapement wheel"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "Arthur discovered that a tiny bent cog had locked the escapement wheel."
       },
       {
         q: "How did Arthur solve the mechanical problem?",
@@ -703,7 +741,8 @@ After examining the central pendulum, Arthur discovered that a tiny bent cog had
           "He installed an electronic battery-powered motor",
           "He replaced all the internal wooden gears with plastic parts"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "Rather than modern steel, he spent three days hand-filing a custom bronze replacement cog."
       }
     ]
   },
@@ -725,7 +764,8 @@ Crucially, lifelong learners cultivate an attitude known as a growth mindset: th
           "It stimulates neuroplasticity and creates new neural connections",
           "It only benefits children under the age of twelve"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "Consistent, deliberate learning stimulates neuroplasticity — the brain's ability to forge new neural pathways."
       },
       {
         q: "How much daily time is recommended to significantly reinforce working memory?",
@@ -734,7 +774,8 @@ Crucially, lifelong learners cultivate an attitude known as a growth mindset: th
           "Merely twenty minutes a day",
           "Forty-five minutes every weekend only"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "Devoting merely twenty minutes each day to analytical reading dramatically reinforces working memory."
       },
       {
         q: "How do individuals with a growth mindset view their personal mistakes?",
@@ -743,7 +784,8 @@ Crucially, lifelong learners cultivate an attitude known as a growth mindset: th
           "As dangerous failures that should be concealed from others",
           "As invaluable feedback and opportunities for development"
         ],
-        answer: 2
+        answer: 2,
+        evidence: "They cultivate a growth mindset: they perceive errors not as inadequacy, but as invaluable feedback."
       }
     ]
   },
@@ -765,7 +807,8 @@ Furthermore, responsible travelers invest time in understanding local customs an
           "Strain on natural habitats, plastic pollution, and cultural erosion",
           "A complete lack of visitors in historic cities"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "Overcrowded mountain trails, discarded plastic refuse, and commercialized sacred sites threaten natural wonders."
       },
       {
         q: "What is a key practice recommended for sustainable travelers?",
@@ -774,7 +817,8 @@ Furthermore, responsible travelers invest time in understanding local customs an
           "Prioritizing eco-friendly lodging, train transit, and local businesses",
           "Avoiding all interaction with local residents"
         ],
-        answer: 1
+        answer: 1,
+        evidence: "Conscious travelers prioritize eco-certified guesthouses, travel by train, and patronize independent restaurants."
       },
       {
         q: "Why is learning local customs before arrival important?",
@@ -783,7 +827,8 @@ Furthermore, responsible travelers invest time in understanding local customs an
           "It guarantees discounts at souvenir gift shops",
           "It is required by international airline border security"
         ],
-        answer: 0
+        answer: 0,
+        evidence: "By treating host communities with profound respect and dignity, cultural exchanges foster genuine mutual appreciation."
       }
     ]
   }

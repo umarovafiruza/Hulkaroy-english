@@ -14,10 +14,14 @@ Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, 
 - **Darajalar**: A1, A2, B1 darajalarida 15 ta matn.
 - **Audio tinglash**: Har bir audio yozuvni darhol saytda tinglash (Eshitish/Pauza) va boshqarish imkoniyati.
 
-### 2. Reading Bo'limi (O'qib tushunish)
+### 2. Reading Bo'limi (O'qib tushunish va Tahlil)
 - **Hikoyalar va maqolalar**: A1, A2, B1 darajalarida 15 ta alohida qiziqarli hikoyalar.
-- **Tushunish darajasini tekshirish (Quiz)**: Har bir matn ostida 3 tadan comprehension savollari joylashgan.
-- **Tezkor fikr-mulohaza (Instant Feedback)**: Variant tanlanishi bilanoq javob to'g'ri (yashil) yoki noto'g'ri (qizil) ekanligi darhol ko'rsatiladi va to'g'ri javob belgilanadi.
+- **O'qish tezligi (WPM) va Taymer**: Foydalanuvchi matnni o'qish vaqtini o'lchaydi va "O'qib bo'ldim" tugmasini bosganda uning shaxsiy WPM (daqiqa/so'z) tezligini avtomatik hisoblab ko'rsatadi.
+- **Shaxsiy Lug'at Daftari (Saved Vocabulary)**: Notanish so'zni bosganda "Saqlash" tugmasi orqali o'z shaxsiy lug'atiga qo'shish, Bosh sahifada saqlangan so'zlarni tinglash va o'rganish imkoniyati.
+- **Matnni ovozli eshitish (TTS Read-Along)**: "Eshitish" tugmasi orqali butun hikoyani tabiiy ingliz ovozida tinglash va o'qilayotgan xatboshini sinxron yoritib borish.
+- **Shrift o'lchamini sozlash (`A−` va `A+`)**: O'qish qulayligi uchun matn shriftini kattalashtirish yoki kichiklashtirish.
+- **Tushunish darajasini tekshirish (Quiz)**: Har bir matn ostida 3 tadan comprehension savollari.
+- **Tezkor fikr-mulohaza va Matndan isbot (Evidence)**: Variant tanlanganda to'g'ri/noto'g'rilik bilan birga to'g'ri javob matnning qaysi qismida keltirilgani ko'rsatiladi.
 - **Natija va hisobot**: Barcha savollar bajarilgach, umumiy ball (masalan, *3/3 to'g'ri javob*) va xulosaviy tavsiya ko'rsatiladi.
 - **Qayta ishlash**: Testni istalgan vaqtda qayta yechish imkoniyati.
 

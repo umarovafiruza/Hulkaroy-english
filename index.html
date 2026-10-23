@@ -31,13 +31,23 @@
     </div>
     <div class="list" id="list"></div>
 
-    <!-- Recordings Section on Home Screen -->
+    <!-- Recordings Section on Home Screen (Speaking bo'limida) -->
     <section class="recordings-section" id="recsSection">
       <div class="recs-header">
         <span class="recs-title">Ovozli yozuvlar (Diktafon)</span>
         <span class="recs-count" id="recsCount">0 / 3</span>
       </div>
       <div class="recs-list" id="recsList"></div>
+    </section>
+
+    <!-- Saved Vocabulary Section (Reading bo'limida) -->
+    <section class="vocab-section hidden" id="vocabSection">
+      <div class="vocab-header">
+        <span class="vocab-title">Mening Lug'atim (Saqlangan so'zlar)</span>
+        <span class="vocab-count" id="vocabCount">0 ta so'z</span>
+      </div>
+      <div class="vocab-empty hidden" id="vocabEmpty">Hozircha saqlangan so'zlar yo'q. Matndagi notanish so'zlarni bosib, "Saqlash" tugmasi orqali lug'atingizga qo'shishingiz mumkin.</div>
+      <div class="vocab-list" id="vocabList"></div>
     </section>
   </main>
 
@@ -124,9 +134,14 @@
       <div class="reading-top-meta">
         <span class="reading-top-title" id="rReadingTitle"></span>
         <span class="lvl-badge" id="rReadingLvl"></span>
+        <span class="reading-timer-badge" id="readingTimer">00:00</span>
       </div>
-      <div class="reading-q-badge" id="rReadingBadge">
-        <span id="rReadingQCount">3 ta savol</span>
+      <div class="reading-top-actions">
+        <div class="reading-font-tools">
+          <button class="btn-tool" id="fontSizeDown" type="button" aria-label="Shriftni kichiklashtirish" title="Shriftni kichiklashtirish">A−</button>
+          <button class="btn-tool" id="fontSizeUp" type="button" aria-label="Shriftni kattalashtirish" title="Shriftni kattalashtirish">A+</button>
+        </div>
+        <button class="btn-tool-text" id="readingTtsBtn" type="button">Eshitish</button>
       </div>
     </div>
 
@@ -138,6 +153,12 @@
         </header>
 
         <article class="reading-article" id="readingText"></article>
+
+        <!-- Reading Timer & Speed Finish Box -->
+        <div class="reading-timer-box">
+          <button class="btn" id="readingFinishReadBtn" type="button">O'qib bo'ldim (Tezlikni hisoblash)</button>
+          <div class="reading-speed-badge hidden" id="readingSpeedBadge"></div>
+        </div>
 
         <hr class="reading-divider">
 
@@ -173,6 +194,7 @@
     </div>
     <div class="acts">
       <button class="btn ghost" id="sListen">Eshitish</button>
+      <button class="btn ghost" id="sSave" type="button">Saqlash</button>
       <button class="btn" id="sGo">Davom etish</button>
     </div>
   </div>

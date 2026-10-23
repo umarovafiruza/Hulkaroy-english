@@ -857,6 +857,25 @@ input[type=range]::-moz-range-thumb {
   .quiz-result-acts .btn {
     width: 100%;
   }
+  .reading-top-actions {
+    gap: 6px;
+  }
+  .btn-tool-text {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  .vocab-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .vocab-acts {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .reading-timer-box .btn {
+    width: 100%;
+  }
   .sheet .acts {
     width: 100%;
     display: flex;
@@ -1259,4 +1278,267 @@ input[type=range]::-moz-range-thumb {
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+/* Quiz Evidence Box */
+.quiz-evidence {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background-color: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeIn 0.2s ease;
+}
+
+.quiz-evidence-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.quiz-evidence-text {
+  color: var(--ink);
+  font-style: italic;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Reading Timer & Speed Finish Box */
+.reading-timer-box {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.reading-timer-badge {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+
+.reading-speed-badge {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 8px 18px;
+  border-radius: 999px;
+  background-color: var(--bg);
+  animation: fadeIn 0.2s ease;
+}
+
+/* Reading Top Actions & Tools */
+.reading-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reading-font-tools {
+  display: inline-flex;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px;
+  background-color: var(--bg);
+}
+
+.btn-tool {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.btn-tool:hover {
+  background-color: var(--soft);
+  color: var(--ink);
+}
+
+.btn-tool-text {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background-color: var(--bg);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn-tool-text:hover {
+  border-color: var(--ink);
+  background-color: var(--soft);
+}
+
+.btn-tool-text.active {
+  background-color: var(--ink);
+  color: #ffffff;
+  border-color: var(--ink);
+}
+
+/* Audio Story Highlight */
+.reading-article .tts-active {
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  padding: 2px 4px;
+  transition: background-color 0.2s ease;
+}
+
+/* Vocabulary Notebook Section (Home Screen) */
+.vocab-section {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.vocab-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.vocab-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.vocab-count {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.vocab-empty {
+  font-size: 14px;
+  color: var(--muted);
+  padding: 14px 0;
+  line-height: 1.5;
+}
+
+.vocab-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vocab-card {
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.vocab-card:hover {
+  border-color: var(--ink);
+}
+
+.vocab-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vocab-word {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.vocab-uz {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.vocab-meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.vocab-acts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-vocab-play {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background-color: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-vocab-play:hover {
+  border-color: var(--ink);
+  background-color: var(--soft);
+}
+
+.btn-vocab-del {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-vocab-del:hover {
+  color: #dc2626;
+  border-color: #fecaca;
+  background-color: #fef2f2;
+}
+
+/* Save button active in Sheet */
+#sSave.active {
+  background-color: var(--ink);
+  color: #ffffff;
+  border-color: var(--ink);
 }
