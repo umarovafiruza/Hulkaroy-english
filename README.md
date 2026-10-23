@@ -16,13 +16,14 @@ Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, 
 
 ### 2. Reading Bo'limi (O'qib tushunish va Tahlil)
 - **Hikoyalar va maqolalar**: A1, A2, B1 darajalarida 15 ta alohida qiziqarli hikoyalar.
+- **300 ta Savoldan iborat Katta Baza**: Har bir matnda 20 tadan, jami **300 ta comprehension savollari**.
+- **Tasodifiy (Random) Savollar Generatori**: Har bir mashg'ulotda yoki "Qayta ishlash" tugmasi bosilganda 20 talik bazadan tasodifiy 3 ta yangi savol tanlab beriladi. Bu orqali foydalanuvchi bir matn ustida ko'p marotaba turli xil savollarga javob berib, tushunish darajasini chuqurlashtirishi mumkin.
 - **O'qish tezligi (WPM) va Taymer**: Foydalanuvchi matnni o'qish vaqtini o'lchaydi va "O'qib bo'ldim" tugmasini bosganda uning shaxsiy WPM (daqiqa/so'z) tezligini avtomatik hisoblab ko'rsatadi.
 - **Shaxsiy Lug'at Daftari (Saved Vocabulary)**: Notanish so'zni bosganda "Saqlash" tugmasi orqali o'z shaxsiy lug'atiga qo'shish, Bosh sahifada saqlangan so'zlarni tinglash va o'rganish imkoniyati.
 - **Shrift o'lchamini sozlash (`A−` va `A+`)**: O'qish qulayligi uchun matn shriftini kattalashtirish yoki kichiklashtirish.
-- **Tushunish darajasini tekshirish (Quiz)**: Har bir matn ostida 3 tadan comprehension savollari.
 - **Tezkor fikr-mulohaza va Matndan isbot (Evidence)**: Variant tanlanganda to'g'ri/noto'g'rilik bilan birga to'g'ri javob matnning qaysi qismida keltirilgani ko'rsatiladi.
 - **Natija va hisobot**: Barcha savollar bajarilgach, umumiy ball (masalan, *3/3 to'g'ri javob*) va xulosaviy tavsiya ko'rsatiladi.
-- **Qayta ishlash**: Testni istalgan vaqtda qayta yechish imkoniyati.
+- **Qayta ishlash**: Testni qayta ishlaganda yangi tasodifiy savollar generatsiya qilinadi.
 
 ### 3. Umumiy Imkoniyatlar
 - **Murakkab so'zlar (Hard Words) va Talaffuz**: Barcha matnlarda notanish so'zlar nuqtali chiziq bilan belgilangan. Bosilganda o'zbekcha tarjimasi chiqadi va Web Speech API orqali talaffuz qilib beriladi.

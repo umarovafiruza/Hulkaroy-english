@@ -553,7 +553,7 @@
       } else if (lastWpm > 0) {
         statsText = `Oxirgi o'qish tezligingiz: ${lastWpm} so'z/daqiqa.`;
       } else {
-        statsText = "Barcha hikoyalarda 3 tadan tushunish savollari mavjud.";
+        statsText = "Jami 300 ta savol bazasi: har bir mashqda tasodifiy 3 ta yangi savol beriladi.";
       }
       statsEl.textContent = statsText;
 
@@ -566,9 +566,10 @@
         const isDone = Boolean(record);
         const numStr = String(idx + 1).padStart(2, '0');
         const wCount = countWords(t.text);
+        const qCount = t.questions ? t.questions.length : 20;
         const badgeText = isDone
           ? `${record.correct}/${record.total} to'g'ri`
-          : `${t.questions ? t.questions.length : 3} ta savol`;
+          : `${qCount} savol (3 random)`;
 
         return `
           <button class="topic ${isDone ? 'done' : ''}" data-id="${t.id}" data-type="reading" type="button">
@@ -1296,8 +1297,20 @@
      Reading (O'qish, Tezlik, Audio va Comprehension Test) Mantiqi
      ========================================================================== */
   let currentReadingTopic = null;
+  let activeReadingQuestions = [];
   let readingAnswers = {};
   let readingStartTime = 0;
+
+  function sampleRandomQuestions(allQuestions, count = 3) {
+    if (!Array.isArray(allQuestions) || allQuestions.length === 0) return [];
+    if (allQuestions.length <= count) return [...allQuestions];
+    const shuffled = [...allQuestions];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, count);
+  }
   let readingTimerInterval = null;
   let readingTimerSecs = 0;
   let currentReadingFontSize = store.getReadingFontSize();
@@ -1339,6 +1352,7 @@
 
     currentReadingTopic = topic;
     readingAnswers = {};
+    activeReadingQuestions = sampleRandomQuestions(topic.questions, 3);
 
     homeEl.classList.add('hidden');
     readerEl.classList.add('hidden');
@@ -1349,9 +1363,10 @@
 
     if (readingArticleTitleEl) readingArticleTitleEl.textContent = topic.title;
     const wCount = countWords(topic.text);
-    const qCount = topic.questions ? topic.questions.length : 3;
+    const totalBank = topic.questions ? topic.questions.length : 20;
+    const sessionCount = activeReadingQuestions.length;
     if (readingMetaLineEl) {
-      readingMetaLineEl.textContent = `${topic.levelName} · ${wCount} so'z · ${qCount} ta savol`;
+      readingMetaLineEl.textContent = `${topic.levelName} · ${wCount} so'z · ${totalBank} ta savoldan tasodifiy ${sessionCount} tasi`;
     }
 
     readingTextEl.innerHTML = renderFormattedText(topic.text);
@@ -1365,8 +1380,8 @@
   }
 
   function renderQuiz() {
-    if (!currentReadingTopic || !currentReadingTopic.questions) return;
-    const questions = currentReadingTopic.questions;
+    if (!currentReadingTopic || !activeReadingQuestions || activeReadingQuestions.length === 0) return;
+    const questions = activeReadingQuestions;
 
     quizResultEl.classList.add('hidden');
 
@@ -1432,8 +1447,8 @@
   }
 
   function checkQuizCompletion() {
-    if (!currentReadingTopic || !currentReadingTopic.questions) return;
-    const questions = currentReadingTopic.questions;
+    if (!currentReadingTopic || !activeReadingQuestions || activeReadingQuestions.length === 0) return;
+    const questions = activeReadingQuestions;
     const totalQ = questions.length;
     const answeredCount = Object.keys(readingAnswers).length;
 
@@ -1474,6 +1489,9 @@
 
   quizRetryBtn.addEventListener('click', () => {
     readingAnswers = {};
+    if (currentReadingTopic && currentReadingTopic.questions) {
+      activeReadingQuestions = sampleRandomQuestions(currentReadingTopic.questions, 3);
+    }
     renderQuiz();
     quizSectionEl.scrollIntoView({ behavior: 'smooth' });
   });
