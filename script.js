@@ -73,7 +73,6 @@
   const readingTimerEl = $('readingTimer');
   const fontSizeDownBtn = $('fontSizeDown');
   const fontSizeUpBtn = $('fontSizeUp');
-  const readingTtsBtn = $('readingTtsBtn');
   const readingArticleTitleEl = $('readingArticleTitle');
   const readingMetaLineEl = $('readingMetaLine');
   const readingTextEl = $('readingText');
@@ -1301,8 +1300,6 @@
   let readingStartTime = 0;
   let readingTimerInterval = null;
   let readingTimerSecs = 0;
-  let readingTtsActive = false;
-  let readingTtsUtterance = null;
   let currentReadingFontSize = store.getReadingFontSize();
 
   function applyReadingFontSize(size) {
@@ -1336,77 +1333,12 @@
     }
   }
 
-  function stopReadingTts() {
-    if (tts && readingTtsActive) {
-      tts.cancel();
-    }
-    readingTtsActive = false;
-    if (readingTtsBtn) {
-      readingTtsBtn.textContent = 'Eshitish';
-      readingTtsBtn.classList.remove('active');
-    }
-    if (readingTextEl) {
-      readingTextEl.querySelectorAll('.tts-active').forEach((el) => el.classList.remove('tts-active'));
-    }
-  }
-
-  function startReadingTts() {
-    if (!tts || !currentReadingTopic) return;
-    stopReadingTts();
-
-    const paragraphs = readingTextEl.querySelectorAll('p');
-    if (!paragraphs || paragraphs.length === 0) return;
-
-    readingTtsActive = true;
-    if (readingTtsBtn) {
-      readingTtsBtn.textContent = "To'xtatish";
-      readingTtsBtn.classList.add('active');
-    }
-
-    let pIndex = 0;
-
-    function speakNextParagraph() {
-      if (!readingTtsActive || pIndex >= paragraphs.length) {
-        stopReadingTts();
-        return;
-      }
-
-      paragraphs.forEach((p, idx) => {
-        p.classList.toggle('tts-active', idx === pIndex);
-      });
-
-      const text = paragraphs[pIndex].textContent;
-      readingTtsUtterance = new SpeechSynthesisUtterance(text);
-      readingTtsUtterance.lang = 'en-US';
-      readingTtsUtterance.rate = 0.92;
-
-      const voices = tts.getVoices();
-      const engVoice = voices.find((v) => v.lang.startsWith('en')) || null;
-      if (engVoice) readingTtsUtterance.voice = engVoice;
-
-      readingTtsUtterance.onend = () => {
-        if (!readingTtsActive) return;
-        pIndex++;
-        speakNextParagraph();
-      };
-
-      readingTtsUtterance.onerror = () => {
-        stopReadingTts();
-      };
-
-      tts.speak(readingTtsUtterance);
-    }
-
-    speakNextParagraph();
-  }
-
   function openReadingTopic(id) {
     const topic = readingTopicsData.find((t) => t.id === id) || readingTopicsData[0];
     if (!topic) return;
 
     currentReadingTopic = topic;
     readingAnswers = {};
-    stopReadingTts();
 
     homeEl.classList.add('hidden');
     readerEl.classList.add('hidden');
@@ -1588,19 +1520,8 @@
     });
   }
 
-  if (readingTtsBtn) {
-    readingTtsBtn.addEventListener('click', () => {
-      if (readingTtsActive) {
-        stopReadingTts();
-      } else {
-        startReadingTts();
-      }
-    });
-  }
-
   function exitReading() {
     stopReadingTimer();
-    stopReadingTts();
     readingReaderEl.classList.add('hidden');
     homeEl.classList.remove('hidden');
     sheetEl.classList.add('hidden');

@@ -18,7 +18,6 @@ Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, 
 - **Hikoyalar va maqolalar**: A1, A2, B1 darajalarida 15 ta alohida qiziqarli hikoyalar.
 - **O'qish tezligi (WPM) va Taymer**: Foydalanuvchi matnni o'qish vaqtini o'lchaydi va "O'qib bo'ldim" tugmasini bosganda uning shaxsiy WPM (daqiqa/so'z) tezligini avtomatik hisoblab ko'rsatadi.
 - **Shaxsiy Lug'at Daftari (Saved Vocabulary)**: Notanish so'zni bosganda "Saqlash" tugmasi orqali o'z shaxsiy lug'atiga qo'shish, Bosh sahifada saqlangan so'zlarni tinglash va o'rganish imkoniyati.
-- **Matnni ovozli eshitish (TTS Read-Along)**: "Eshitish" tugmasi orqali butun hikoyani tabiiy ingliz ovozida tinglash va o'qilayotgan xatboshini sinxron yoritib borish.
 - **Shrift o'lchamini sozlash (`A−` va `A+`)**: O'qish qulayligi uchun matn shriftini kattalashtirish yoki kichiklashtirish.
 - **Tushunish darajasini tekshirish (Quiz)**: Har bir matn ostida 3 tadan comprehension savollari.
 - **Tezkor fikr-mulohaza va Matndan isbot (Evidence)**: Variant tanlanganda to'g'ri/noto'g'rilik bilan birga to'g'ri javob matnning qaysi qismida keltirilgani ko'rsatiladi.

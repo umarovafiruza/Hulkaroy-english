@@ -860,10 +860,6 @@ input[type=range]::-moz-range-thumb {
   .reading-top-actions {
     gap: 6px;
   }
-  .btn-tool-text {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
   .vocab-card {
     flex-direction: column;
     align-items: flex-start;
@@ -1380,40 +1376,6 @@ input[type=range]::-moz-range-thumb {
 .btn-tool:hover {
   background-color: var(--soft);
   color: var(--ink);
-}
-
-.btn-tool-text {
-  font: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink);
-  padding: 6px 14px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background-color: var(--bg);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-  user-select: none;
-}
-
-.btn-tool-text:hover {
-  border-color: var(--ink);
-  background-color: var(--soft);
-}
-
-.btn-tool-text.active {
-  background-color: var(--ink);
-  color: #ffffff;
-  border-color: var(--ink);
-}
-
-/* Audio Story Highlight */
-.reading-article .tts-active {
-  background-color: rgba(0, 0, 0, 0.08);
-  border-radius: 4px;
-  padding: 2px 4px;
-  transition: background-color 0.2s ease;
 }
 
 /* Vocabulary Notebook Section (Home Screen) */
