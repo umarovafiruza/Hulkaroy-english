@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Speak Fast</title>
+  <title>Speak Fast — Language Practice Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,8 +16,9 @@
     <div class="home-top">
       <div class="brand">Speak Fast</div>
       <nav class="mode-tabs" id="modeTabs" aria-label="Bo'lim tanlash">
-        <button class="mode-btn active" data-mode="speaking" type="button">Speaking</button>
+        <button class="mode-btn active" data-mode="speaking" type="button">Shadowing</button>
         <button class="mode-btn" data-mode="reading" type="button">Reading</button>
+        <button class="mode-btn" data-mode="listening" type="button">Listening</button>
       </nav>
     </div>
     <h1 id="homeTitle">Ovoz chiqarib o'qing. Ravon gapirishni o'rganing.</h1>
@@ -27,11 +28,13 @@
       <button class="level-btn active" data-lvl="all" type="button">Barchasi</button>
       <button class="level-btn" data-lvl="A1" type="button">A1 Oson</button>
       <button class="level-btn" data-lvl="A2" type="button">A2 O'rta</button>
-      <button class="level-btn" data-lvl="B1" type="button">B1 Murakkab</button>
+      <button class="level-btn" data-lvl="B1" type="button">B1 O'rta-yuqori</button>
+      <button class="level-btn" data-lvl="B2" type="button">B2 Kuchli</button>
+      <button class="level-btn" data-lvl="C1" type="button">C1 Ilg'or</button>
     </div>
     <div class="list" id="list"></div>
 
-    <!-- Recordings Section on Home Screen (Speaking bo'limida) -->
+    <!-- Recordings Section on Home Screen (Speaking / Shadowing bo'limida) -->
     <section class="recordings-section" id="recsSection">
       <div class="recs-header">
         <span class="recs-title">Ovozli yozuvlar (Diktafon)</span>
@@ -49,9 +52,31 @@
       <div class="vocab-empty hidden" id="vocabEmpty">Hozircha saqlangan so'zlar yo'q. Matndagi notanish so'zlarni bosib, "Saqlash" tugmasi orqali lug'atingizga qo'shishingiz mumkin.</div>
       <div class="vocab-list" id="vocabList"></div>
     </section>
+
+    <!-- Listening Stats Summary (Listening bo'limida) -->
+    <section class="listening-stats-section hidden" id="listeningStatsSection">
+      <div class="listening-stats-header">
+        <span class="listening-stats-title">Listening Progress & Statistics</span>
+        <span class="listening-stats-badge" id="listeningProgressBadge">0 / 12 bajarildi</span>
+      </div>
+      <div class="listening-stats-cards">
+        <div class="stat-card">
+          <span class="stat-val" id="statCompletedCount">0</span>
+          <span class="stat-lbl">Bajarilgan mashqlar</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-val" id="statAvgScore">0%</span>
+          <span class="stat-lbl">O'rtacha ball</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-val" id="statBestScore">0/8</span>
+          <span class="stat-lbl">Eng yaxshi natija</span>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Reader Screen (Speaking) -->
+  <!-- Reader Screen (Speaking / Shadowing) -->
   <section class="reader hidden" id="reader" aria-live="polite">
     <div class="top">
       <button class="back" id="back">Mavzular</button>
@@ -197,6 +222,170 @@
       </div>
     </div>
   </section>
+
+  <!-- Listening Screen (Listening Comprehension & Practice) -->
+  <section class="listening-reader hidden" id="listeningReader" aria-live="polite">
+    <!-- Top Bar -->
+    <div class="listening-top">
+      <button class="back" id="listeningBack">Mavzular</button>
+      <div class="listening-top-meta">
+        <span class="listening-top-title" id="rListeningTitle"></span>
+        <span class="lvl-badge" id="rListeningLvl"></span>
+        <span class="part-badge" id="rListeningPart"></span>
+      </div>
+      <div class="listening-top-actions">
+        <button class="btn-tool" id="listeningVolToggle" type="button" aria-label="Ovozni o'chirish/yoqish" title="Ovoz">
+          <span id="volIcon">🔊</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="listening-body">
+      <div class="listening-container">
+        <header class="listening-header">
+          <div class="listening-part-label" id="listeningPartLabel">Part 1 · Everyday Conversations</div>
+          <h1 class="listening-title" id="listeningExerciseTitle"></h1>
+          <div class="listening-meta" id="listeningMetaLine"></div>
+        </header>
+
+        <!-- Professional Audio Player Card -->
+        <div class="listening-player-card" id="listeningPlayerCard">
+          <div class="player-top-row">
+            <div class="player-status-wrap">
+              <span class="player-pulse-dot" id="playerPulseDot"></span>
+              <span class="player-status-text" id="playerStatusText">Audio tayyor</span>
+            </div>
+            <div class="player-voice-tag">Natural Native Voice · Female</div>
+          </div>
+
+          <!-- Waveform visualizer bars -->
+          <div class="player-waveform" id="playerWaveform" aria-hidden="true">
+            <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+            <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+            <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+            <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+            <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+            <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+          </div>
+
+          <!-- Seekable Progress Bar -->
+          <div class="player-progress-wrap">
+            <div class="player-progress-track" id="playerProgressTrack" role="slider" aria-label="Audio progress" tabindex="0">
+              <div class="player-progress-fill" id="playerProgressFill"></div>
+            </div>
+            <div class="player-time-row">
+              <span class="player-time-cur" id="playerTimeCur">00:00</span>
+              <span class="player-time-dur" id="playerTimeDur">00:35</span>
+            </div>
+          </div>
+
+          <!-- Player Controls -->
+          <div class="player-controls-row">
+            <div class="player-ctrls-left">
+              <button class="btn-player-main" id="listeningPlayBtn" type="button" aria-label="Play / Pause">
+                <span id="listeningPlayIcon">▶</span> Play
+              </button>
+              <button class="btn-player-sub" id="listeningRestartBtn" type="button" title="Boshidan ijro etish">
+                ↺ Boshidan
+              </button>
+            </div>
+
+            <div class="player-ctrls-right">
+              <div class="player-speed-selector" id="listeningSpeedSelector">
+                <button class="btn-speed-opt" data-speed="0.8" type="button">0.8x</button>
+                <button class="btn-speed-opt active" data-speed="1.0" type="button">1.0x</button>
+                <button class="btn-speed-opt" data-speed="1.2" type="button">1.2x</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="player-hint" id="playerHint">
+            Audioni diqqat bilan eshiting. Test davomida matn ko'rinmaydi. Audio tugagach yoki tinglash jarayonida savollarga javob berishingiz mumkin.
+          </div>
+        </div>
+
+        <!-- Interactive Questions Section -->
+        <section class="listening-quiz-section" id="listeningQuizSection">
+          <div class="listening-quiz-head">
+            <div class="quiz-head-left">
+              <h2 class="listening-quiz-title">Tushunish savollari (8 ta)</h2>
+              <div class="listening-quiz-progress-text" id="listeningQuizProgressText">0 / 8 ta savolga javob berildi</div>
+            </div>
+            <div class="quiz-head-right">
+              <button class="btn sm" id="listeningSubmitQuizBtn" type="button">Testni yakunlash</button>
+            </div>
+          </div>
+
+          <!-- Question Stepper Dots (1 to 8) -->
+          <div class="q-stepper" id="qStepper" aria-label="Savollar navigatsiyasi">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Current Active Question Card -->
+          <div class="q-active-card" id="qActiveCard">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Question Nav Bottom Row -->
+          <div class="q-nav-row">
+            <button class="btn ghost" id="qPrevBtn" type="button">← Oldingi</button>
+            <span class="q-nav-indicator" id="qNavIndicator">1 / 8</span>
+            <button class="btn ghost" id="qNextBtn" type="button">Keyingi →</button>
+          </div>
+        </section>
+
+        <!-- Results and Review Section (Hidden until test submitted) -->
+        <section class="listening-results-section hidden" id="listeningResultsSection">
+          <div class="listening-result-hero">
+            <div class="result-score-badge" id="lResultScore">0 / 8</div>
+            <div class="result-percent" id="lResultPercent">0%</div>
+            <h3 class="result-headline" id="lResultHeadline">Test yakunlandi</h3>
+            <p class="result-feedback" id="lResultFeedback"></p>
+
+            <div class="result-stats-pills">
+              <span class="pill correct" id="lResultPillCorrect">0 To'g'ri</span>
+              <span class="pill wrong" id="lResultPillWrong">0 Noto'g'ri</span>
+              <span class="pill unans" id="lResultPillUnans">0 Javobsiz</span>
+            </div>
+
+            <div class="result-hero-acts">
+              <button class="btn ghost" id="lToggleTranscriptBtn" type="button">Transkriptni ko'rish</button>
+              <button class="btn ghost" id="lRetryBtn" type="button">Qayta ishlash</button>
+              <button class="btn" id="lNextExerciseBtn" type="button">Keyingi mashq</button>
+              <button class="btn ghost" id="lBackToListBtn" type="button">Mavzularga qaytish</button>
+            </div>
+          </div>
+
+          <!-- Audio Transcript Card (Hidden by default, shown upon toggle) -->
+          <div class="transcript-card hidden" id="listeningTranscriptCard">
+            <div class="transcript-head">
+              <h4>Audio Transkripti (Audio matni)</h4>
+              <span class="transcript-notice">Haqiqiy o'qilgan matn</span>
+            </div>
+            <div class="transcript-body" id="listeningTranscriptText"></div>
+          </div>
+
+          <!-- Detailed Question-by-Question Review -->
+          <div class="listening-review-container">
+            <h4 class="review-title">Savollar tahlili va to'g'ri javoblar</h4>
+            <div class="review-list" id="listeningReviewList"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- Unanswered Questions Confirmation Dialog / Modal -->
+  <div class="modal-backdrop hidden" id="unansweredModal">
+    <div class="modal-card">
+      <h3 class="modal-title">Javob berilmagan savollar bor</h3>
+      <p class="modal-msg" id="unansweredModalMsg">Siz 8 ta savoldan 2 tasiga hali javob bermadingiz (Savollar: 3, 7).</p>
+      <div class="modal-acts">
+        <button class="btn ghost" id="unansweredCancelBtn" type="button">Davom etish</button>
+        <button class="btn" id="unansweredConfirmBtn" type="button">Baribir yakunlash</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Universal Word Bottom Sheet -->
   <div class="sheet hidden" id="sheet">

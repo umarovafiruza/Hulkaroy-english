@@ -93,9 +93,69 @@
   const vocabEmptyEl = $('vocabEmpty');
   const vocabListEl = $('vocabList');
 
+  /* Listening bo'limi DOM elementlari */
+  const listeningStatsSectionEl = $('listeningStatsSection');
+  const statCompletedCountEl = $('statCompletedCount');
+  const statAvgScoreEl = $('statAvgScore');
+  const statBestScoreEl = $('statBestScore');
+  const listeningProgressBadgeEl = $('listeningProgressBadge');
+
+  const listeningReaderEl = $('listeningReader');
+  const listeningBackBtn = $('listeningBack');
+  const rListeningTitleEl = $('rListeningTitle');
+  const rListeningLvlEl = $('rListeningLvl');
+  const rListeningPartEl = $('rListeningPart');
+  const listeningExerciseTitleEl = $('listeningExerciseTitle');
+  const listeningMetaLineEl = $('listeningMetaLine');
+
+  const listeningPlayerCardEl = $('listeningPlayerCard');
+  const playerPulseDotEl = $('playerPulseDot');
+  const playerStatusTextEl = $('playerStatusText');
+  const playerProgressTrackEl = $('playerProgressTrack');
+  const playerProgressFillEl = $('playerProgressFill');
+  const playerTimeCurEl = $('playerTimeCur');
+  const playerTimeDurEl = $('playerTimeDur');
+  const listeningPlayBtn = $('listeningPlayBtn');
+  const listeningPlayIcon = $('listeningPlayIcon');
+  const listeningRestartBtn = $('listeningRestartBtn');
+  const listeningSpeedSelectorEl = $('listeningSpeedSelector');
+  const listeningVolToggleBtn = $('listeningVolToggle');
+  const volIconEl = $('volIcon');
+
+  const listeningQuizSectionEl = $('listeningQuizSection');
+  const listeningQuizProgressTextEl = $('listeningQuizProgressText');
+  const listeningSubmitQuizBtn = $('listeningSubmitQuizBtn');
+  const qStepperEl = $('qStepper');
+  const qActiveCardEl = $('qActiveCard');
+  const qPrevBtn = $('qPrevBtn');
+  const qNextBtn = $('qNextBtn');
+  const qNavIndicatorEl = $('qNavIndicator');
+
+  const listeningResultsSectionEl = $('listeningResultsSection');
+  const lResultScoreEl = $('lResultScore');
+  const lResultPercentEl = $('lResultPercent');
+  const lResultHeadlineEl = $('lResultHeadline');
+  const lResultFeedbackEl = $('lResultFeedback');
+  const lResultPillCorrectEl = $('lResultPillCorrect');
+  const lResultPillWrongEl = $('lResultPillWrong');
+  const lResultPillUnansEl = $('lResultPillUnans');
+  const lToggleTranscriptBtn = $('lToggleTranscriptBtn');
+  const lRetryBtn = $('lRetryBtn');
+  const lNextExerciseBtn = $('lNextExerciseBtn');
+  const lBackToListBtn = $('lBackToListBtn');
+  const listeningTranscriptCardEl = $('listeningTranscriptCard');
+  const listeningTranscriptTextEl = $('listeningTranscriptText');
+  const listeningReviewListEl = $('listeningReviewList');
+
+  const unansweredModalEl = $('unansweredModal');
+  const unansweredModalMsgEl = $('unansweredModalMsg');
+  const unansweredCancelBtn = $('unansweredCancelBtn');
+  const unansweredConfirmBtn = $('unansweredConfirmBtn');
+
   /* ---------- Ma'lumotlar va Saqlash (LocalStorage) ---------- */
   const topicsData = (typeof TOPICS !== 'undefined') ? TOPICS : (window.TOPICS || []);
   const readingTopicsData = (typeof READING_TOPICS !== 'undefined') ? READING_TOPICS : (window.READING_TOPICS || []);
+  const listeningExercisesData = (typeof LISTENING_EXERCISES !== 'undefined') ? LISTENING_EXERCISES : (window.LISTENING_EXERCISES || []);
 
   const store = {
     get() {
@@ -136,6 +196,32 @@
         data.completed[id] = { correct, total, ts: Date.now() };
         localStorage.setItem('sf_reading', JSON.stringify(data));
       } catch (e) {}
+    },
+    getListening() {
+      try {
+        const raw = localStorage.getItem('sf_listening');
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return { completed: {} };
+    },
+    saveListeningResult(id, score, total) {
+      try {
+        const data = this.getListening();
+        if (!data.completed) data.completed = {};
+        data.completed[id] = { score, total, pct: Math.round((score / total) * 100), ts: Date.now() };
+        localStorage.setItem('sf_listening', JSON.stringify(data));
+      } catch (e) {}
+    },
+    getListeningStats() {
+      const data = this.getListening();
+      const records = Object.values(data.completed || {});
+      const count = records.length;
+      if (count === 0) return { count: 0, avg: 0, best: 0 };
+      const totalScore = records.reduce((sum, r) => sum + (r.score || 0), 0);
+      const totalPossible = records.reduce((sum, r) => sum + (r.total || 8), 0);
+      const avgPct = totalPossible > 0 ? Math.round((totalScore / totalPossible) * 100) : 0;
+      const bestPct = Math.max(...records.map((r) => r.pct || 0));
+      return { count, avg: avgPct, best: bestPct };
     },
     getVocab() {
       try {
@@ -214,7 +300,7 @@
     getMode() {
       try {
         const m = localStorage.getItem('sf_mode');
-        if (m === 'reading' || m === 'speaking') return m;
+        if (m === 'reading' || m === 'speaking' || m === 'listening') return m;
       } catch (e) {}
       return 'speaking';
     },
@@ -239,7 +325,7 @@
     getLevel() {
       try {
         const lvl = localStorage.getItem('sf_lvl');
-        if (lvl && ['all', 'A1', 'A2', 'B1'].includes(lvl)) return lvl;
+        if (lvl && ['all', 'A1', 'A2', 'B1', 'B2', 'C1'].includes(lvl)) return lvl;
       } catch (e) {}
       return 'all';
     },
@@ -304,9 +390,9 @@
   };
 
   /* Matn yordamchilari */
-  const plainText = (s) => s.replace(/\{([^|}]+)\|[^}]+\}/g, '$1');
+  const plainText = (s) => String(s == null ? '' : s).replace(/\{([^|}]+)\|[^}]+\}/g, '$1');
   const countWords = (s) => plainText(s).trim().split(/\s+/).filter(Boolean).length;
-  const escapeHtml = (s) => s.replace(/[&<>"']/g, (c) => ({
+  const escapeHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
@@ -544,8 +630,60 @@
       });
     }
 
-    if (currentMode === 'reading') {
+    if (currentMode === 'listening') {
+      // LISTENING REJIMI
+      if (homeTitleEl) homeTitleEl.textContent = "Listening Practice";
+      if (homeLeadEl) homeLeadEl.textContent = "Improve your English listening skills through realistic audio exercises and comprehension questions.";
+      if (recsSectionEl) recsSectionEl.classList.add('hidden');
+      if (vocabSectionEl) vocabSectionEl.classList.add('hidden');
+      if (listeningStatsSectionEl) listeningStatsSectionEl.classList.remove('hidden');
+
+      const lStore = store.getListening();
+      const completed = lStore.completed || {};
+      const stats = store.getListeningStats();
+
+      if (statCompletedCountEl) statCompletedCountEl.textContent = `${stats.count} / ${listeningExercisesData.length}`;
+      if (statAvgScoreEl) statAvgScoreEl.textContent = `${stats.avg}%`;
+      if (statBestScoreEl) statBestScoreEl.textContent = `${stats.best}%`;
+      if (listeningProgressBadgeEl) {
+        listeningProgressBadgeEl.textContent = `${stats.count} ta bajarildi`;
+      }
+      statsEl.textContent = '';
+
+      const filtered = (currentLevelFilter === 'all')
+        ? listeningExercisesData
+        : listeningExercisesData.filter((t) => t.level === currentLevelFilter);
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 48px 20px; color: var(--text-secondary); font-size: 15px;">
+            Ushbu daraja uchun listening mashqlari hozircha mavjud emas. Yuqoridagi "Barchasi" yoki boshqa darajani tanlang.
+          </div>
+        `;
+      } else {
+        listEl.innerHTML = filtered.map((ex, idx) => {
+          const record = completed[ex.id];
+          const isDone = Boolean(record);
+          const numStr = String(idx + 1).padStart(2, '0');
+          const badgeText = isDone
+            ? `${record.score}/${record.total} to'g'ri (${record.pct}%)`
+            : `${ex.questions.length} savol · Boshlash`;
+
+          const partLabel = ex.partName || `Part ${ex.part}`;
+          const durLabel = ex.duration || (ex.durationSec ? formatDuration(ex.durationSec) : '00:35');
+          return `
+            <button class="topic ${isDone ? 'done' : ''}" data-id="${ex.id}" data-type="listening" type="button">
+              <span class="n">${numStr}</span>
+              <span class="t">${escapeHtml(ex.title)}</span>
+              <span class="lvl">${ex.level}</span>
+              <span class="m">${escapeHtml(partLabel)} · ${durLabel} · ${badgeText}</span>
+            </button>
+          `;
+        }).join('');
+      }
+    } else if (currentMode === 'reading') {
       // READING REJIMI
+      if (listeningStatsSectionEl) listeningStatsSectionEl.classList.add('hidden');
       if (homeTitleEl) homeTitleEl.textContent = "Matnlarni o'qing. Tushunish darajangizni sinang.";
       if (homeLeadEl) homeLeadEl.textContent = "Hikoyani diqqat bilan o'qing va matn ostidagi test savollariga javob bering.";
       if (recsSectionEl) recsSectionEl.classList.add('hidden');
@@ -596,6 +734,7 @@
       renderVocabList();
     } else {
       // SPEAKING REJIMI
+      if (listeningStatsSectionEl) listeningStatsSectionEl.classList.add('hidden');
       if (homeTitleEl) homeTitleEl.textContent = "Ovoz chiqarib o'qing. Ravon gapirishni o'rganing.";
       if (homeLeadEl) homeLeadEl.textContent = "Mavzuni tanlang. Matn o'zi sekin yuqoriga suriladi, siz esa uni ovoz chiqarib o'qiysiz.";
       if (recsSectionEl) recsSectionEl.classList.remove('hidden');
@@ -703,7 +842,9 @@
     const id = Number(btn.dataset.id);
     if (isNaN(id)) return;
     const type = btn.dataset.type || currentMode;
-    if (type === 'reading') {
+    if (type === 'listening') {
+      openListeningExercise(id);
+    } else if (type === 'reading') {
       openReadingTopic(id);
     } else {
       openTopic(id);
@@ -1610,6 +1751,911 @@
   readingBackBtn.addEventListener('click', exitReading);
   quizFinishBtn.addEventListener('click', exitReading);
 
+  /* ==========================================================================
+     Listening (Audio Tinglash, Ovoz, Pleyer va 8 ta Savol) Mantiqi
+     ========================================================================== */
+  let currentListeningExercise = null;
+  let currentQIndex = 0; // 0..7
+  let listeningAnswers = {}; // { [qId]: answer }
+  let playbackSpeed = 1.0;
+  let isMuted = false;
+  let audioTimerInterval = null;
+  let audioCurrentSec = 0;
+  let audioTotalSec = 35;
+  let audioState = 'idle'; // 'idle' | 'playing' | 'paused' | 'ended'
+  let currentUtterance = null;
+
+  function getNativeFemaleVoice() {
+    if (!('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices || voices.length === 0) return null;
+
+    const preferred = [
+      'Google US English', 'Microsoft Zira', 'Samantha', 'Victoria', 'Karen',
+      'Tessa', 'Moira', 'Fiona', 'Veena', 'en-US-Standard-C', 'en-US-Neural2-F'
+    ];
+    for (const name of preferred) {
+      const match = voices.find((v) => v.name.toLowerCase().includes(name.toLowerCase()));
+      if (match) return match;
+    }
+
+    const enVoices = voices.filter((v) => v.lang && v.lang.startsWith('en'));
+    const female = enVoices.find((v) => /female|woman|girl/i.test(v.name));
+    if (female) return female;
+
+    const usVoice = voices.find((v) => v.lang === 'en-US');
+    if (usVoice) return usVoice;
+
+    return enVoices[0] || voices[0] || null;
+  }
+
+  function calculateAudioRate(level, speed) {
+    let base = 0.95;
+    if (level === 'A1' || level === 'A2') base = 0.88;
+    else if (level === 'B1') base = 0.95;
+    else if (level === 'B2' || level === 'C1') base = 1.0;
+    return Math.max(0.6, Math.min(1.8, base * speed));
+  }
+
+  function updatePlayerUI() {
+    if (!playerProgressFillEl || !playerTimeCurEl || !playerTimeDurEl) return;
+    const pct = audioTotalSec > 0 ? Math.min(100, Math.max(0, (audioCurrentSec / audioTotalSec) * 100)) : 0;
+    playerProgressFillEl.style.width = `${pct}%`;
+    playerTimeCurEl.textContent = formatDuration(audioCurrentSec);
+    playerTimeDurEl.textContent = formatDuration(audioTotalSec);
+
+    if (playerStatusTextEl) {
+      if (audioState === 'playing') {
+        playerStatusTextEl.textContent = 'Audio tinglanmoqda... (diqqat bilan tinglang)';
+      } else if (audioState === 'paused') {
+        playerStatusTextEl.textContent = 'Pauzada. Davom ettirish uchun bosing.';
+      } else if (audioState === 'ended') {
+        playerStatusTextEl.textContent = 'Audio yakunlandi. Quyidagi 8 ta savolga javob bering.';
+      } else {
+        playerStatusTextEl.textContent = 'Tinglashga tayyor';
+      }
+    }
+
+    if (playerPulseDotEl) {
+      playerPulseDotEl.classList.toggle('playing', audioState === 'playing');
+    }
+
+    if (listeningPlayBtn) {
+      if (audioState === 'playing') {
+        listeningPlayBtn.classList.add('playing');
+        listeningPlayBtn.setAttribute('aria-label', 'Pause audio');
+        listeningPlayBtn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+            <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+          </svg>
+        `;
+      } else {
+        listeningPlayBtn.classList.remove('playing');
+        listeningPlayBtn.setAttribute('aria-label', 'Play audio');
+        listeningPlayBtn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        `;
+      }
+    }
+  }
+
+  function startAudioPlayback() {
+    if (!currentListeningExercise) return;
+    if (!('speechSynthesis' in window)) {
+      if (playerStatusTextEl) playerStatusTextEl.textContent = "Brauzeringiz ovoz tizimini qo'llab-quvvatlamaydi.";
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    audioState = 'playing';
+    updatePlayerUI();
+
+    const script = currentListeningExercise.audioScript || currentListeningExercise.audioText || currentListeningExercise.transcript || '';
+    const utt = new SpeechSynthesisUtterance(script);
+    currentUtterance = utt;
+
+    const femaleVoice = getNativeFemaleVoice();
+    if (femaleVoice) utt.voice = femaleVoice;
+    utt.lang = 'en-US';
+    utt.rate = calculateAudioRate(currentListeningExercise.level, playbackSpeed);
+    utt.volume = isMuted ? 0 : 1;
+
+    const estimatedDuration = Math.round((currentListeningExercise.durationSec || 35) / playbackSpeed);
+    audioTotalSec = estimatedDuration;
+    if (audioCurrentSec >= audioTotalSec) {
+      audioCurrentSec = 0;
+    }
+
+    const startWallTime = Date.now() - (audioCurrentSec * 1000);
+
+    if (audioTimerInterval) clearInterval(audioTimerInterval);
+    audioTimerInterval = setInterval(() => {
+      if (audioState !== 'playing') return;
+      const elapsed = (Date.now() - startWallTime) / 1000;
+      audioCurrentSec = Math.min(audioTotalSec, elapsed);
+      updatePlayerUI();
+      if (audioCurrentSec >= audioTotalSec) {
+        finishAudioPlayback();
+      }
+    }, 100);
+
+    utt.onend = () => {
+      finishAudioPlayback();
+    };
+
+    utt.onerror = (e) => {
+      console.warn('SpeechSynthesis xatolik:', e);
+      finishAudioPlayback();
+    };
+
+    window.speechSynthesis.speak(utt);
+  }
+
+  function pauseAudioPlayback() {
+    audioState = 'paused';
+    if (audioTimerInterval) {
+      clearInterval(audioTimerInterval);
+      audioTimerInterval = null;
+    }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    updatePlayerUI();
+  }
+
+  function finishAudioPlayback() {
+    audioState = 'ended';
+    audioCurrentSec = audioTotalSec;
+    if (audioTimerInterval) {
+      clearInterval(audioTimerInterval);
+      audioTimerInterval = null;
+    }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    updatePlayerUI();
+  }
+
+  function restartAudioPlayback() {
+    audioCurrentSec = 0;
+    startAudioPlayback();
+  }
+
+  function openListeningExercise(id) {
+    const ex = listeningExercisesData.find((item) => item.id === id) || listeningExercisesData[0];
+    if (!ex) return;
+
+    currentListeningExercise = ex;
+    currentQIndex = 0;
+    listeningAnswers = {};
+    audioCurrentSec = 0;
+    audioTotalSec = ex.durationSec || 35;
+    audioState = 'idle';
+
+    homeEl.classList.add('hidden');
+    readerEl.classList.add('hidden');
+    readingReaderEl.classList.add('hidden');
+    listeningReaderEl.classList.remove('hidden');
+
+    if (rListeningTitleEl) rListeningTitleEl.textContent = ex.title;
+    if (rListeningLvlEl) rListeningLvlEl.textContent = ex.level;
+    const partLabel = ex.partName || `Part ${ex.part}`;
+    const durLabel = ex.duration || (ex.durationSec ? formatDuration(ex.durationSec) : '00:35');
+    if (rListeningPartEl) rListeningPartEl.textContent = `Part ${ex.part}`;
+
+    if (listeningExerciseTitleEl) listeningExerciseTitleEl.textContent = ex.title;
+    if (listeningMetaLineEl) {
+      listeningMetaLineEl.textContent = `${ex.levelName || ex.level} · ${partLabel} · ${durLabel} · 8 ta savol`;
+    }
+
+    listeningResultsSectionEl.classList.add('hidden');
+    listeningTranscriptCardEl.classList.add('hidden');
+    if (lToggleTranscriptBtn) {
+      lToggleTranscriptBtn.textContent = "Transkriptni ko'rish (Audio matni)";
+    }
+    listeningQuizSectionEl.classList.remove('hidden');
+
+    playbackSpeed = 1.0;
+    if (listeningSpeedSelectorEl) {
+      listeningSpeedSelectorEl.querySelectorAll('.speed-btn').forEach((b) => {
+        b.classList.toggle('active', parseFloat(b.dataset.speed) === 1.0);
+      });
+    }
+    updatePlayerUI();
+
+    renderQuestionStepper();
+    renderActiveQuestion();
+
+    const bodyEl = listeningReaderEl.querySelector('.listening-body');
+    if (bodyEl) bodyEl.scrollTop = 0;
+
+    setTimeout(() => {
+      startAudioPlayback();
+    }, 350);
+  }
+
+  function isQuestionAnswered(qId) {
+    if (!currentListeningExercise) return false;
+    const q = currentListeningExercise.questions.find((item) => item.id === qId);
+    if (!q) return false;
+    const ans = listeningAnswers[qId];
+    if (ans === undefined || ans === null) return false;
+
+    if (q.type === 'multiple_choice' || q.type === 'true_false') {
+      return true;
+    }
+    if (q.type === 'fill_blank' || q.type === 'short_answer') {
+      return typeof ans === 'string' && ans.trim().length > 0;
+    }
+    if (q.type === 'matching') {
+      return ans !== undefined && ans !== null;
+    }
+    if (q.type === 'ordering') {
+      return Array.isArray(ans) && ans.length === (q.options ? q.options.length : 4);
+    }
+    return false;
+  }
+
+  function renderQuestionStepper() {
+    if (!qStepperEl || !currentListeningExercise) return;
+    const questions = currentListeningExercise.questions;
+
+    qStepperEl.innerHTML = questions.map((q, idx) => {
+      const isActive = idx === currentQIndex;
+      const isAnswered = isQuestionAnswered(q.id);
+      const classes = ['step-dot'];
+      if (isActive) classes.push('active');
+      if (isAnswered) classes.push('answered');
+
+      return `
+        <button class="${classes.join(' ')}" data-idx="${idx}" type="button" aria-label="${idx + 1}-savol">
+          ${idx + 1}
+        </button>
+      `;
+    }).join('');
+
+    const answeredCount = questions.filter((q) => isQuestionAnswered(q.id)).length;
+    if (listeningQuizProgressTextEl) {
+      listeningQuizProgressTextEl.textContent = `${answeredCount} / 8 ta savolga javob berildi`;
+    }
+    if (qNavIndicatorEl) {
+      qNavIndicatorEl.textContent = `Savol: ${currentQIndex + 1} / 8`;
+    }
+    if (qPrevBtn) {
+      qPrevBtn.disabled = (currentQIndex === 0);
+    }
+    if (qNextBtn) {
+      qNextBtn.disabled = (currentQIndex === 7);
+    }
+  }
+
+  function getQuestionTypeLabel(type) {
+    switch (type) {
+      case 'multiple_choice': return 'Multiple Choice';
+      case 'true_false': return 'True / False';
+      case 'fill_blank': return 'Fill in the Blank';
+      case 'short_answer': return 'Short Answer';
+      case 'matching': return 'Matching';
+      case 'ordering': return 'Ordering';
+      default: return 'Savol';
+    }
+  }
+
+  function renderActiveQuestion() {
+    if (!currentListeningExercise || !qActiveCardEl) return;
+    const q = currentListeningExercise.questions[currentQIndex];
+    if (!q) return;
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const currentAns = listeningAnswers[q.id];
+
+    let bodyHtml = '';
+
+    if (q.type === 'multiple_choice') {
+      bodyHtml = `
+        <div class="q-options-grid">
+          ${q.options.map((optText, optIdx) => {
+            const isSel = currentAns === optIdx;
+            return `
+              <button class="l-opt-btn ${isSel ? 'selected' : ''}" data-opt="${optIdx}" type="button">
+                <span class="l-opt-letter">${letters[optIdx] || optIdx + 1}</span>
+                <span class="l-opt-text">${escapeHtml(optText)}</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+      `;
+    } else if (q.type === 'true_false') {
+      bodyHtml = `
+        <div class="q-tf-grid">
+          <button class="l-tf-btn ${currentAns === 'True' ? 'selected' : ''}" data-val="True" type="button">
+            True
+          </button>
+          <button class="l-tf-btn ${currentAns === 'False' ? 'selected' : ''}" data-val="False" type="button">
+            False
+          </button>
+        </div>
+      `;
+    } else if (q.type === 'fill_blank') {
+      bodyHtml = `
+        <div class="l-text-input-wrap">
+          <label class="l-input-label">Bo'sh joyga to'g'ri so'z yoki iborani yozing:</label>
+          <input type="text" class="l-blank-input" id="lBlankInput" placeholder="${escapeHtml(q.placeholder || 'Javobingizni yozing...')}" value="${escapeHtml(currentAns || '')}" autocomplete="off">
+        </div>
+      `;
+    } else if (q.type === 'short_answer') {
+      bodyHtml = `
+        <div class="l-text-input-wrap">
+          <label class="l-input-label">Savolga qisqa va aniq javob yozing:</label>
+          <input type="text" class="l-blank-input" id="lShortInput" placeholder="${escapeHtml(q.placeholder || 'Qisqa javobni yozing...')}" value="${escapeHtml(currentAns || '')}" autocomplete="off">
+        </div>
+      `;
+    } else if (q.type === 'matching') {
+      const pairs = (q.options || []).map((opt) => {
+        const parts = opt.split('->').map((s) => s.trim());
+        return { left: parts[0], right: parts[1] || parts[0] };
+      });
+      if (!currentAns) {
+        listeningAnswers[q.id] = pairs.map((_, i) => i);
+      }
+      bodyHtml = `
+        <div class="l-matching-container">
+          <div class="l-ordering-tip">Tegishli ma'lumotlar va vazifalar juftligi:</div>
+          ${pairs.map((p) => `
+            <div class="l-matching-row">
+              <div class="l-match-left"><strong>${escapeHtml(p.left)}</strong></div>
+              <div class="l-match-right">${escapeHtml(p.right)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else if (q.type === 'ordering') {
+      let orderArr = currentAns;
+      if (!orderArr || !Array.isArray(orderArr)) {
+        orderArr = q.options ? q.options.map((_, i) => i) : [0, 1, 2, 3];
+        listeningAnswers[q.id] = orderArr;
+      }
+      bodyHtml = `
+        <div class="l-ordering-container">
+          <div class="l-ordering-tip">Voqealarni to'g'ri ketma-ketlikda joylashtirish uchun strelkalardan foydalaning:</div>
+          ${orderArr.map((optIdx, displayPos) => {
+            const optText = (q.options && q.options[optIdx]) ? q.options[optIdx] : `Hodisa ${optIdx + 1}`;
+            return `
+              <div class="l-order-item" data-pos="${displayPos}">
+                <span class="l-order-num">${displayPos + 1}</span>
+                <span class="l-order-text">${escapeHtml(optText)}</span>
+                <div class="l-order-actions">
+                  <button class="l-order-btn btn-up" type="button" data-act="up" ${displayPos === 0 ? 'disabled' : ''} aria-label="Yuqoriga surish">↑</button>
+                  <button class="l-order-btn btn-down" type="button" data-act="down" ${displayPos === orderArr.length - 1 ? 'disabled' : ''} aria-label="Pastga surish">↓</button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    qActiveCardEl.innerHTML = `
+      <div class="q-card-head">
+        <span class="q-type-badge">${getQuestionTypeLabel(q.type)}</span>
+        <span class="q-num-badge">${currentQIndex + 1} / 8</span>
+      </div>
+      <div class="q-prompt">${escapeHtml(q.q)}</div>
+      ${bodyHtml}
+    `;
+
+    renderQuestionStepper();
+  }
+
+  qActiveCardEl.addEventListener('click', (e) => {
+    if (!currentListeningExercise) return;
+    const q = currentListeningExercise.questions[currentQIndex];
+    if (!q) return;
+
+    const optBtn = e.target.closest('.l-opt-btn');
+    if (optBtn) {
+      const optIdx = parseInt(optBtn.dataset.opt, 10);
+      listeningAnswers[q.id] = optIdx;
+      renderActiveQuestion();
+      return;
+    }
+
+    const tfBtn = e.target.closest('.l-tf-btn');
+    if (tfBtn) {
+      listeningAnswers[q.id] = tfBtn.dataset.val;
+      renderActiveQuestion();
+      return;
+    }
+
+    const orderBtn = e.target.closest('.l-order-btn');
+    if (orderBtn) {
+      const orderItem = orderBtn.closest('.l-order-item');
+      if (!orderItem) return;
+      const act = orderBtn.dataset.act;
+      const pos = parseInt(orderItem.dataset.pos, 10);
+      let orderArr = [...(listeningAnswers[q.id] || (q.options ? q.options.map((_, i) => i) : [0, 1, 2, 3]))];
+
+      if (act === 'up' && pos > 0) {
+        const temp = orderArr[pos];
+        orderArr[pos] = orderArr[pos - 1];
+        orderArr[pos - 1] = temp;
+        listeningAnswers[q.id] = orderArr;
+        renderActiveQuestion();
+      } else if (act === 'down' && pos < orderArr.length - 1) {
+        const temp = orderArr[pos];
+        orderArr[pos] = orderArr[pos + 1];
+        orderArr[pos + 1] = temp;
+        listeningAnswers[q.id] = orderArr;
+        renderActiveQuestion();
+      }
+      return;
+    }
+  });
+
+  qActiveCardEl.addEventListener('input', (e) => {
+    if (!currentListeningExercise) return;
+    const q = currentListeningExercise.questions[currentQIndex];
+    if (!q) return;
+    if (e.target.classList.contains('l-blank-input')) {
+      listeningAnswers[q.id] = e.target.value.trim();
+      renderQuestionStepper();
+    }
+  });
+
+  qActiveCardEl.addEventListener('change', (e) => {
+    if (!currentListeningExercise) return;
+    const q = currentListeningExercise.questions[currentQIndex];
+    if (!q) return;
+    if (e.target.classList.contains('l-match-select')) {
+      const itemId = e.target.dataset.item;
+      const val = e.target.value;
+      const curMatches = { ...(listeningAnswers[q.id] || {}) };
+      curMatches[itemId] = val;
+      listeningAnswers[q.id] = curMatches;
+      renderQuestionStepper();
+    }
+  });
+
+  if (qPrevBtn) {
+    qPrevBtn.addEventListener('click', () => {
+      if (currentQIndex > 0) {
+        currentQIndex--;
+        renderActiveQuestion();
+      }
+    });
+  }
+
+  if (qNextBtn) {
+    qNextBtn.addEventListener('click', () => {
+      if (currentQIndex < 7) {
+        currentQIndex++;
+        renderActiveQuestion();
+      }
+    });
+  }
+
+  if (qStepperEl) {
+    qStepperEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.step-dot');
+      if (!btn) return;
+      const idx = parseInt(btn.dataset.idx, 10);
+      if (!isNaN(idx) && idx >= 0 && idx < 8) {
+        currentQIndex = idx;
+        renderActiveQuestion();
+      }
+    });
+  }
+
+  function getUnansweredQuestionNumbers() {
+    if (!currentListeningExercise) return [];
+    const unanswered = [];
+    currentListeningExercise.questions.forEach((q, idx) => {
+      if (!isQuestionAnswered(q.id)) {
+        unanswered.push(idx + 1);
+      }
+    });
+    return unanswered;
+  }
+
+  if (listeningSubmitQuizBtn) {
+    listeningSubmitQuizBtn.addEventListener('click', () => {
+      const unanswered = getUnansweredQuestionNumbers();
+      if (unanswered.length > 0) {
+        if (unansweredModalMsgEl) {
+          unansweredModalMsgEl.innerHTML = `Siz 8 ta savoldan quyidagilarga javob bermadingiz: <strong>${unanswered.join(', ')}-savol(lar)</strong>.<br>Testni baribir yakunlab, natijani ko'rmoqchimisiz?`;
+        }
+        if (unansweredModalEl) {
+          unansweredModalEl.classList.remove('hidden');
+        }
+      } else {
+        finishAndGradeListening();
+      }
+    });
+  }
+
+  if (unansweredCancelBtn) {
+    unansweredCancelBtn.addEventListener('click', () => {
+      if (unansweredModalEl) unansweredModalEl.classList.add('hidden');
+      const unanswered = getUnansweredQuestionNumbers();
+      if (unanswered.length > 0) {
+        currentQIndex = unanswered[0] - 1;
+        renderActiveQuestion();
+      }
+    });
+  }
+
+  if (unansweredConfirmBtn) {
+    unansweredConfirmBtn.addEventListener('click', () => {
+      if (unansweredModalEl) unansweredModalEl.classList.add('hidden');
+      finishAndGradeListening();
+    });
+  }
+
+  function cleanString(str) {
+    return String(str || '')
+      .trim()
+      .toLowerCase()
+      .replace(/['".,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
+      .replace(/\s+/g, ' ');
+  }
+
+  function finishAndGradeListening() {
+    if (!currentListeningExercise) return;
+    pauseAudioPlayback();
+
+    const questions = currentListeningExercise.questions;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let unansweredCount = 0;
+    const gradedResults = [];
+
+    questions.forEach((q, idx) => {
+      const userAns = listeningAnswers[q.id];
+      const answered = isQuestionAnswered(q.id);
+
+      if (!answered) {
+        unansweredCount++;
+        gradedResults.push({
+          index: idx + 1,
+          question: q,
+          userAnswer: null,
+          isCorrect: false,
+          isUnanswered: true
+        });
+        return;
+      }
+
+      let isCorrect = false;
+      const targetAns = (q.answer !== undefined) ? q.answer : q.correctAnswer;
+      const targetVariants = q.acceptedAnswers || q.acceptedVariants || [];
+
+      if (q.type === 'multiple_choice') {
+        isCorrect = (userAns === targetAns);
+      } else if (q.type === 'true_false') {
+        isCorrect = (String(userAns).toLowerCase() === String(targetAns).toLowerCase());
+      } else if (q.type === 'fill_blank' || q.type === 'short_answer') {
+        const cleanUser = cleanString(userAns);
+        const cleanCorrect = cleanString(targetAns);
+        const variants = targetVariants.map(cleanString);
+        isCorrect = (cleanUser === cleanCorrect || variants.includes(cleanUser));
+      } else if (q.type === 'matching') {
+        if (Array.isArray(targetAns)) {
+          isCorrect = Array.isArray(userAns) && userAns.every((val, i) => val === targetAns[i]);
+        } else {
+          isCorrect = Boolean(userAns);
+        }
+      } else if (q.type === 'ordering') {
+        const correctOrder = targetAns || (q.options ? q.options.map((_, i) => i) : [0, 1, 2, 3]);
+        isCorrect = Array.isArray(userAns) && userAns.every((val, i) => val === correctOrder[i]);
+      }
+
+      if (isCorrect) {
+        correctCount++;
+      } else {
+        wrongCount++;
+      }
+
+      gradedResults.push({
+        index: idx + 1,
+        question: q,
+        userAnswer: userAns,
+        isCorrect,
+        isUnanswered: false
+      });
+    });
+
+    const total = questions.length;
+    const pct = Math.round((correctCount / total) * 100);
+
+    store.saveListeningResult(currentListeningExercise.id, correctCount, total);
+
+    listeningQuizSectionEl.classList.add('hidden');
+    listeningResultsSectionEl.classList.remove('hidden');
+
+    if (lResultScoreEl) lResultScoreEl.textContent = `${correctCount} / ${total}`;
+    if (lResultPercentEl) lResultPercentEl.textContent = `${pct}%`;
+
+    if (lResultHeadlineEl) {
+      if (correctCount === total) lResultHeadlineEl.textContent = "Mukammal natija! (100%)";
+      else if (correctCount >= 6) lResultHeadlineEl.textContent = "Ajoyib eshitib tushunish mahorati!";
+      else if (correctCount >= 4) lResultHeadlineEl.textContent = "Yaxshi natija, davom eting!";
+      else lResultHeadlineEl.textContent = "Yana bir bor tinglab, qayta urinib ko'ring";
+    }
+
+    if (lResultFeedbackEl) {
+      if (correctCount === total) {
+        lResultFeedbackEl.textContent = "Siz audio matndagi barcha faktlar, tafsilotlar va nuqtalarni to'liq eshitib tushundingiz.";
+      } else if (correctCount >= 6) {
+        lResultFeedbackEl.textContent = "Nutqning asosiy g'oyasi va ko'p detallarini tushundingiz. Noto'g'ri bo'lgan savollarni audio iqtiboslari bilan tahlil qiling.";
+      } else if (correctCount >= 4) {
+        lResultFeedbackEl.textContent = "Bir nechta savollarda kalit so'zlarni ilg'adingiz. Transkriptni ko'rib chiqib, audio bilan birga qayta eshitish foydali bo'ladi.";
+      } else {
+        lResultFeedbackEl.textContent = "Bu daraja biroz murakkab tuyulishi mumkin. Audio matnini o'qib chiqing va tushunarsiz so'zlarni o'rganing.";
+      }
+    }
+
+    if (lResultPillCorrectEl) lResultPillCorrectEl.textContent = `${correctCount} to'g'ri`;
+    if (lResultPillWrongEl) lResultPillWrongEl.textContent = `${wrongCount} noto'g'ri`;
+    if (lResultPillUnansEl) lResultPillUnansEl.textContent = `${unansweredCount} javobsiz`;
+
+    const transcriptText = currentListeningExercise.transcript || currentListeningExercise.audioText || currentListeningExercise.audioScript || '';
+    if (listeningTranscriptTextEl) {
+      listeningTranscriptTextEl.innerHTML = transcriptText
+        .split(/\n\n+/)
+        .map((p) => `<p>${escapeHtml(p)}</p>`)
+        .join('');
+    }
+    listeningTranscriptCardEl.classList.add('hidden');
+    if (lToggleTranscriptBtn) {
+      lToggleTranscriptBtn.textContent = "Transkriptni ko'rish (Audio matni)";
+    }
+
+    renderListeningReview(gradedResults);
+
+    const bodyEl = listeningReaderEl.querySelector('.listening-body');
+    if (bodyEl) bodyEl.scrollTop = 0;
+  }
+
+  function formatUserAnswer(q, userAns, isUnanswered) {
+    if (isUnanswered) return '<span class="review-empty">Javob berilmadi</span>';
+    const letters = ['A', 'B', 'C', 'D'];
+    if (q.type === 'multiple_choice') {
+      const optText = (q.options && q.options[userAns]) ? q.options[userAns] : '';
+      return `<strong>${letters[userAns] || ''})</strong> ${escapeHtml(optText)}`;
+    }
+    if (q.type === 'true_false') {
+      return `<strong>${escapeHtml(userAns)}</strong>`;
+    }
+    if (q.type === 'fill_blank' || q.type === 'short_answer') {
+      return `"${escapeHtml(userAns)}"`;
+    }
+    if (q.type === 'matching') {
+      if (Array.isArray(q.options)) {
+        return q.options.map((opt) => `<div>• ${escapeHtml(opt)}</div>`).join('');
+      }
+      return escapeHtml(String(userAns));
+    }
+    if (q.type === 'ordering') {
+      if (Array.isArray(userAns) && Array.isArray(q.options)) {
+        return userAns.map((optIdx, pos) => `<div>${pos + 1}. ${escapeHtml(q.options[optIdx])}</div>`).join('');
+      }
+      return escapeHtml(String(userAns));
+    }
+    return escapeHtml(String(userAns));
+  }
+
+  function formatCorrectAnswer(q) {
+    const letters = ['A', 'B', 'C', 'D'];
+    const targetAns = (q.answer !== undefined) ? q.answer : q.correctAnswer;
+    const targetVariants = q.acceptedAnswers || q.acceptedVariants || [];
+
+    if (q.type === 'multiple_choice') {
+      const optText = (q.options && q.options[targetAns]) ? q.options[targetAns] : targetAns;
+      return `<strong>${letters[targetAns] || ''})</strong> ${escapeHtml(optText)}`;
+    }
+    if (q.type === 'true_false') {
+      return `<strong>${escapeHtml(targetAns)}</strong>`;
+    }
+    if (q.type === 'fill_blank' || q.type === 'short_answer') {
+      let str = `"${escapeHtml(targetAns)}"`;
+      if (targetVariants && targetVariants.length > 0) {
+        str += ` (qabul: ${targetVariants.map((v) => `"${escapeHtml(v)}"`).join(', ')})`;
+      }
+      return str;
+    }
+    if (q.type === 'matching') {
+      if (Array.isArray(q.options)) {
+        return q.options.map((opt) => `<div>• ${escapeHtml(opt)}</div>`).join('');
+      }
+      return escapeHtml(String(targetAns));
+    }
+    if (q.type === 'ordering') {
+      const order = Array.isArray(targetAns) ? targetAns : (q.options ? q.options.map((_, i) => i) : []);
+      if (Array.isArray(q.options)) {
+        return order.map((optIdx, pos) => `<div>${pos + 1}. ${escapeHtml(q.options[optIdx])}</div>`).join('');
+      }
+      return escapeHtml(String(targetAns));
+    }
+    return escapeHtml(String(targetAns));
+  }
+
+  function renderListeningReview(results) {
+    if (!listeningReviewListEl) return;
+    listeningReviewListEl.innerHTML = results.map((res) => {
+      const q = res.question;
+      let badgeClass = 'correct';
+      let badgeText = "To'g'ri";
+      if (res.isUnanswered) {
+        badgeClass = 'unanswered';
+        badgeText = 'Javobsiz';
+      } else if (!res.isCorrect) {
+        badgeClass = 'wrong';
+        badgeText = "Noto'g'ri";
+      }
+
+      return `
+        <div class="review-card ${badgeClass}">
+          <div class="review-card-head">
+            <div class="review-q-text">${res.index}. ${escapeHtml(q.q)}</div>
+            <span class="review-badge ${badgeClass}">${badgeText}</span>
+          </div>
+          <div class="review-answers">
+            <div class="review-ans-row">
+              <span class="review-ans-label">Sizning javobingiz:</span>
+              <div class="review-ans-val user-val">${formatUserAnswer(q, res.userAnswer, res.isUnanswered)}</div>
+            </div>
+            ${!res.isCorrect ? `
+              <div class="review-ans-row">
+                <span class="review-ans-label">To'g'ri javob:</span>
+                <div class="review-ans-val correct-val">${formatCorrectAnswer(q)}</div>
+              </div>
+            ` : ''}
+          </div>
+          ${q.audioQuote ? `
+            <div class="review-quote">
+              <span class="review-quote-label">Audio iqtibos:</span> "${escapeHtml(q.audioQuote)}"
+            </div>
+          ` : ''}
+          ${q.explanation ? `
+            <div class="review-expl">
+              <span class="review-expl-label">Tushuntirish:</span> ${escapeHtml(q.explanation)}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  if (lToggleTranscriptBtn) {
+    lToggleTranscriptBtn.addEventListener('click', () => {
+      const isHidden = listeningTranscriptCardEl.classList.contains('hidden');
+      if (isHidden) {
+        listeningTranscriptCardEl.classList.remove('hidden');
+        lToggleTranscriptBtn.textContent = 'Transkriptni yashirish';
+        listeningTranscriptCardEl.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        listeningTranscriptCardEl.classList.add('hidden');
+        lToggleTranscriptBtn.textContent = "Transkriptni ko'rish (Audio matni)";
+      }
+    });
+  }
+
+  if (lRetryBtn) {
+    lRetryBtn.addEventListener('click', () => {
+      listeningAnswers = {};
+      currentQIndex = 0;
+      listeningResultsSectionEl.classList.add('hidden');
+      listeningQuizSectionEl.classList.remove('hidden');
+      renderQuestionStepper();
+      renderActiveQuestion();
+      restartAudioPlayback();
+      const bodyEl = listeningReaderEl.querySelector('.listening-body');
+      if (bodyEl) bodyEl.scrollTop = 0;
+    });
+  }
+
+  if (lNextExerciseBtn) {
+    lNextExerciseBtn.addEventListener('click', () => {
+      if (!currentListeningExercise) return;
+      const curIdx = listeningExercisesData.findIndex((ex) => ex.id === currentListeningExercise.id);
+      const nextIdx = (curIdx + 1) % listeningExercisesData.length;
+      const nextEx = listeningExercisesData[nextIdx];
+      openListeningExercise(nextEx.id);
+    });
+  }
+
+  function exitListening() {
+    pauseAudioPlayback();
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (unansweredModalEl) {
+      unansweredModalEl.classList.add('hidden');
+    }
+    listeningReaderEl.classList.add('hidden');
+    homeEl.classList.remove('hidden');
+    renderHome();
+  }
+
+  if (lBackToListBtn) lBackToListBtn.addEventListener('click', exitListening);
+  if (listeningBackBtn) listeningBackBtn.addEventListener('click', exitListening);
+
+  if (listeningPlayBtn) {
+    listeningPlayBtn.addEventListener('click', () => {
+      if (audioState === 'playing') {
+        pauseAudioPlayback();
+      } else {
+        startAudioPlayback();
+      }
+    });
+  }
+
+  if (listeningRestartBtn) {
+    listeningRestartBtn.addEventListener('click', () => {
+      restartAudioPlayback();
+    });
+  }
+
+  if (playerProgressTrackEl) {
+    playerProgressTrackEl.addEventListener('click', (e) => {
+      if (!currentListeningExercise) return;
+      const rect = playerProgressTrackEl.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(1, clickX / rect.width));
+      audioCurrentSec = Math.round(pct * audioTotalSec);
+      updatePlayerUI();
+      if (audioState === 'playing') {
+        startAudioPlayback();
+      }
+    });
+  }
+
+  if (listeningSpeedSelectorEl) {
+    listeningSpeedSelectorEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.speed-btn');
+      if (!btn) return;
+      const speed = parseFloat(btn.dataset.speed);
+      if (!speed) return;
+      playbackSpeed = speed;
+      listeningSpeedSelectorEl.querySelectorAll('.speed-btn').forEach((b) => {
+        b.classList.toggle('active', parseFloat(b.dataset.speed) === playbackSpeed);
+      });
+      if (audioState === 'playing') {
+        startAudioPlayback();
+      } else {
+        audioTotalSec = Math.round((currentListeningExercise.durationSec || 35) / playbackSpeed);
+        updatePlayerUI();
+      }
+    });
+  }
+
+  if (listeningVolToggleBtn) {
+    listeningVolToggleBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      listeningVolToggleBtn.classList.toggle('active', isMuted);
+      if (volIconEl) {
+        if (isMuted) {
+          volIconEl.innerHTML = `
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          `;
+        } else {
+          volIconEl.innerHTML = `
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          `;
+        }
+      }
+      if (audioState === 'playing' && currentUtterance) {
+        startAudioPlayback();
+      }
+    });
+  }
+
   /* ---------- Boshqaruv tugmalari va hodisalar ---------- */
   pauseBtn.addEventListener('click', () => {
     if (R.inCountdown) return;
@@ -1788,6 +2834,28 @@
 
   // Klaviatura tugmalari (Space, strelkalar va 1-4 raqamlar)
   document.addEventListener('keydown', (e) => {
+    // Listening ekrani ochiq bo'lsa
+    if (listeningReaderEl && !listeningReaderEl.classList.contains('hidden')) {
+      if (e.key === 'Escape') {
+        if (unansweredModalEl && !unansweredModalEl.classList.contains('hidden')) {
+          unansweredModalEl.classList.add('hidden');
+        } else {
+          exitListening();
+        }
+        return;
+      }
+      if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT') {
+        e.preventDefault();
+        if (audioState === 'playing') {
+          pauseAudioPlayback();
+        } else {
+          startAudioPlayback();
+        }
+        return;
+      }
+      return;
+    }
+
     // Reading ekrani ochiq bo'lsa
     if (readingReaderEl && !readingReaderEl.classList.contains('hidden')) {
       if (e.key === 'Escape') {

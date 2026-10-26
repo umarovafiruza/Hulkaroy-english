@@ -708,11 +708,1199 @@ Furthermore, responsible travelers invest time in understanding local customs an
   }
 ];
 
+/* ==========================================================================
+   LISTENING PRACTICE (Eshitib Tushunish Mashqlari)
+   CEFR Darajalari: A1, A2, B1, B2, C1
+   Har bir mashqda 8 tadan CEFR/IELTS formatidagi savollar
+   ========================================================================== */
+// LISTENING_EXERCISES (12 full exercises x 8 questions = 96 questions)
+const LISTENING_EXERCISES = [
+  /* ==================== Exercise 201 (A1 - Part 1) ==================== */
+  {
+    id: 201,
+    level: "A1",
+    levelName: "A1 Beginner",
+    part: 1,
+    partName: "Part 1 · Everyday Conversations",
+    title: "Meeting at the Central Café",
+    durationSec: 32,
+    audioText: "Hi Anna! Are we still meeting for lunch today? Yes, Mark, let's meet at the Central Café near the bus station. Is twelve thirty good for you? That sounds perfect. I am really hungry! Great. They have delicious vegetable soup and fresh sandwiches today. Let's sit at an outdoor table if it is sunny. See you at twelve thirty then! Bye!",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "Where do Mark and Anna agree to meet?",
+        options: [
+          "At the Central Café near the bus station",
+          "Inside the city library reading hall",
+          "At Mark's office cafeteria downtown",
+          "Near the train station flower garden"
+        ],
+        answer: 0,
+        explanation: "Anna explicitly suggests: 'Let's meet at the Central Café near the bus station.'"
+      },
+      {
+        id: 2,
+        type: "fill_blank",
+        q: "Mark and Anna agree to meet at ______ pm.",
+        answer: "12:30",
+        acceptedAnswers: ["12:30", "12.30", "12:30 pm", "twelve thirty"],
+        explanation: "Mark asks: 'Is twelve thirty good for you?' and Anna confirms: 'See you at twelve thirty then!'"
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        q: "What food is featured on the café's menu today?",
+        options: [
+          "Vegetable soup and fresh sandwiches",
+          "Italian pasta and tomato pizza",
+          "Grilled salmon and brown rice",
+          "Cheeseburgers and potato fries"
+        ],
+        answer: 0,
+        explanation: "Anna mentions: 'They have delicious vegetable soup and fresh sandwiches today.'"
+      },
+      {
+        id: 4,
+        type: "true_false",
+        q: "Mark tells Anna that he is not feeling hungry at all.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "Mark clearly states: 'That sounds perfect. I am really hungry!'"
+      },
+      {
+        id: 5,
+        type: "multiple_choice",
+        q: "Where does Anna prefer to sit if the weather is warm and sunny?",
+        options: [
+          "At an outdoor table",
+          "On the rooftop terrace",
+          "Next to the ordering counter",
+          "In the quiet back room"
+        ],
+        answer: 0,
+        explanation: "Anna says: 'Let's sit at an outdoor table if it is sunny.'"
+      },
+      {
+        id: 6,
+        type: "short_answer",
+        q: "What transport facility is the Central Café located near?",
+        answer: "bus station",
+        acceptedAnswers: ["bus station", "the bus station", "near the bus station", "central bus station"],
+        explanation: "Anna mentions the café is 'near the bus station.'"
+      },
+      {
+        id: 7,
+        type: "true_false",
+        q: "Mark and Anna are planning to meet for breakfast.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "Mark specifically asks: 'Are we still meeting for lunch today?'"
+      },
+      {
+        id: 8,
+        type: "multiple_choice",
+        q: "What is Anna's general tone during the brief conversation?",
+        options: [
+          "Enthusiastic and welcoming",
+          "Rude and hurried",
+          "Confused about the location",
+          "Reluctant to attend"
+        ],
+        answer: 0,
+        explanation: "Anna warmly welcomes Mark's lunch plan, recommends lunch specials, and suggests pleasant outdoor seating."
+      }
+    ]
+  },
+
+  /* ==================== Exercise 202 (A1 - Part 2) ==================== */
+  {
+    id: 202,
+    level: "A1",
+    levelName: "A1 Beginner",
+    part: 2,
+    partName: "Part 2 · Monologue and Information",
+    title: "The City Zoo Announcement",
+    durationSec: 35,
+    audioText: "Attention all visitors. Welcome to the City Zoo! Today, the zoo remains open until six o'clock in the evening. Please note that the elephant feeding show starts at two o'clock at the tropical zone. Tickets for children under five years old are free. For your own safety, please do not feed the monkeys and always stay on the marked walking paths. Souvenirs and cold drinks are available at the gift shop near the exit. Enjoy your visit!",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "What time does the City Zoo close today?",
+        options: [
+          "At six o'clock in the evening",
+          "At four in the afternoon",
+          "At eight o'clock at night",
+          "At five o'clock in the afternoon"
+        ],
+        answer: 0,
+        explanation: "The announcement states: 'Today, the zoo remains open until six o'clock in the evening.'"
+      },
+      {
+        id: 2,
+        type: "fill_blank",
+        q: "The elephant feeding show starts at ______ o'clock in the afternoon.",
+        answer: "2",
+        acceptedAnswers: ["2", "two", "2:00", "2 pm", "two o'clock"],
+        explanation: "'The elephant feeding show starts at two o'clock at the tropical zone.'"
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        q: "In which zoo zone does the elephant feeding show take place?",
+        options: [
+          "Tropical zone",
+          "African savannah zone",
+          "Polar pavilion",
+          "Desert reptiles zone"
+        ],
+        answer: 0,
+        explanation: "The speaker announces: '...at two o'clock at the tropical zone.'"
+      },
+      {
+        id: 4,
+        type: "true_false",
+        q: "Children under five years of age must pay full ticket price.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "The announcement explicitly confirms: 'Tickets for children under five years old are free.'"
+      },
+      {
+        id: 5,
+        type: "multiple_choice",
+        q: "Which animals are visitors strictly prohibited from feeding?",
+        options: [
+          "The monkeys",
+          "The giraffes",
+          "The sea lions",
+          "The elephants"
+        ],
+        answer: 0,
+        explanation: "'For your own safety, please do not feed the monkeys...'"
+      },
+      {
+        id: 6,
+        type: "short_answer",
+        q: "Where is the gift shop located in the zoo?",
+        answer: "near the exit",
+        acceptedAnswers: ["near the exit", "exit", "by the exit", "at the exit"],
+        explanation: "'Souvenirs and cold drinks are available at the gift shop near the exit.'"
+      },
+      {
+        id: 7,
+        type: "true_false",
+        q: "Visitors are advised to remain on the marked walking paths.",
+        options: ["True", "False"],
+        answer: "True",
+        explanation: "'...and always stay on the marked walking paths.'"
+      },
+      {
+        id: 8,
+        type: "multiple_choice",
+        q: "What products are available for purchase at the gift shop?",
+        options: [
+          "Souvenirs and cold drinks",
+          "Binoculars and raincoats",
+          "Fresh fruit baskets",
+          "Zoo guidebooks only"
+        ],
+        answer: 0,
+        explanation: "'Souvenirs and cold drinks are available at the gift shop near the exit.'"
+      }
+    ]
+  },
+
+  /* ==================== Exercise 203 (A2 - Part 1) ==================== */
+  {
+    id: 203,
+    level: "A2",
+    levelName: "A2 Elementary",
+    part: 1,
+    partName: "Part 1 · Everyday Conversations",
+    title: "Buying Train Tickets to Oxford",
+    durationSec: 36,
+    audioText: "Good morning! How can I help you? Hello, I would like a return ticket to Oxford, please. Are you traveling today? Yes, on the next available train. That will be the ten fifteen express from platform four. A standard return ticket is eighteen pounds, or twenty-four pounds for first class. Standard is fine, thank you. Can I pay with credit card? Certainly. Please insert your card into the reader. Here are your tickets and receipt. Have a pleasant journey to Oxford!",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "What destination is the customer traveling to?",
+        options: [
+          "Oxford",
+          "Cambridge",
+          "Edinburgh",
+          "Birmingham"
+        ],
+        answer: 0,
+        explanation: "The customer states: 'I would like a return ticket to Oxford, please.'"
+      },
+      {
+        id: 2,
+        type: "multiple_choice",
+        q: "What type of train ticket does the customer request?",
+        options: [
+          "A return ticket",
+          "A one-way single ticket",
+          "A monthly season ticket",
+          "A weekend group pass"
+        ],
+        answer: 0,
+        explanation: "'I would like a return ticket to Oxford, please.'"
+      },
+      {
+        id: 3,
+        type: "fill_blank",
+        q: "The next available express train departs at ______ from platform four.",
+        answer: "10:15",
+        acceptedAnswers: ["10:15", "10.15", "10:15 am", "ten fifteen"],
+        explanation: "The ticket clerk says: 'That will be the ten fifteen express from platform four.'"
+      },
+      {
+        id: 4,
+        type: "short_answer",
+        q: "From which platform does the train depart?",
+        answer: "Platform 4",
+        acceptedAnswers: ["platform 4", "4", "four", "platform four"],
+        explanation: "'...the ten fifteen express from platform four.'"
+      },
+      {
+        id: 5,
+        type: "multiple_choice",
+        q: "What is the price of a standard return ticket?",
+        options: [
+          "Eighteen pounds",
+          "Twenty-four pounds",
+          "Fourteen pounds",
+          "Twenty pounds"
+        ],
+        answer: 0,
+        explanation: "The clerk explains: 'A standard return ticket is eighteen pounds, or twenty-four pounds for first class.'"
+      },
+      {
+        id: 6,
+        type: "true_false",
+        q: "The passenger decides to purchase a first-class ticket.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "The passenger responds: 'Standard is fine, thank you.'"
+      },
+      {
+        id: 7,
+        type: "multiple_choice",
+        q: "How does the customer pay for the journey?",
+        options: [
+          "By credit card",
+          "With paper banknotes",
+          "Using a mobile travel coupon",
+          "With loyalty points"
+        ],
+        answer: 0,
+        explanation: "Customer asks: 'Can I pay with credit card?' Clerk: 'Certainly. Please insert your card into the reader.'"
+      },
+      {
+        id: 8,
+        type: "true_false",
+        q: "The ticket agent hands the passenger both the travel tickets and a payment receipt.",
+        options: ["True", "False"],
+        answer: "True",
+        explanation: "The clerk concludes: 'Here are your tickets and receipt. Have a pleasant journey to Oxford!'"
+      }
+    ]
+  },
+
+  /* ==================== Exercise 204 (A2 - Part 6) ==================== */
+  {
+    id: 204,
+    level: "A2",
+    levelName: "A2 Elementary",
+    part: 6,
+    partName: "Part 6 · Short Story and Narrative",
+    title: "A Rainy Afternoon Adventure",
+    durationSec: 38,
+    audioText: "Last Tuesday, Liam walked home from college when dark clouds suddenly gathered. Within moments, heavy rain poured across the street. Having forgotten his umbrella, Liam ran into the nearest building, a charming second-hand bookshop called 'The Book Nook'. While waiting for the rain to subside, he browsed the back shelves and discovered an old leather book containing a hand-drawn map of the city from nineteen twenty. The friendly shopkeeper smiled and gifted him the historic map as a keepsake. Liam left feeling delightfully inspired.",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "On what day did Liam have his unexpected adventure?",
+        options: [
+          "Last Tuesday",
+          "Last Thursday",
+          "Last Saturday",
+          "Last Monday"
+        ],
+        answer: 0,
+        explanation: "The story opens with: 'Last Tuesday, Liam walked home from college...'"
+      },
+      {
+        id: 2,
+        type: "true_false",
+        q: "Liam was carrying an umbrella when the rain started.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "The narrator explains: 'Having forgotten his umbrella, Liam ran into the nearest building...'"
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        q: "What was the name of the second-hand bookshop?",
+        options: [
+          "The Book Nook",
+          "The Paper Lantern",
+          "Vintage Tales",
+          "The College Library"
+        ],
+        answer: 0,
+        explanation: "...a charming second-hand bookshop called 'The Book Nook'."
+      },
+      {
+        id: 4,
+        type: "fill_blank",
+        q: "Inside an old leather book, Liam discovered a hand-drawn ______ of the city.",
+        answer: "map",
+        acceptedAnswers: ["map", "city map", "hand-drawn map"],
+        explanation: "...discovered an old leather book containing a hand-drawn map of the city."
+      },
+      {
+        id: 5,
+        type: "short_answer",
+        q: "From which historic year was the hand-drawn map?",
+        answer: "1920",
+        acceptedAnswers: ["1920", "nineteen twenty"],
+        explanation: "...a hand-drawn map of the city from nineteen twenty (1920)."
+      },
+      {
+        id: 6,
+        type: "ordering",
+        q: "Put the events in the order they occurred in Liam's narrative (1 to 4):",
+        options: [
+          "Dark clouds gathered and heavy rain began pouring",
+          "Liam ran into a bookshop called The Book Nook",
+          "Liam discovered an old map inside a leather book",
+          "The shopkeeper gifted Liam the historic map"
+        ],
+        answer: [0, 1, 2, 3],
+        explanation: "First the rain started, then Liam entered the shop, found the map, and finally received it as a gift."
+      },
+      {
+        id: 7,
+        type: "multiple_choice",
+        q: "How did Liam acquire the vintage map?",
+        options: [
+          "The shopkeeper gave it to him as a gift",
+          "Liam purchased it for ten pounds",
+          "He traded an old magazine for it",
+          "He secretly borrowed it without asking"
+        ],
+        answer: 0,
+        explanation: "The friendly shopkeeper smiled and gifted him the historic map as a keepsake."
+      },
+      {
+        id: 8,
+        type: "multiple_choice",
+        q: "How did Liam feel when leaving the bookshop?",
+        options: [
+          "Delightfully inspired",
+          "Tired and soaking wet",
+          "Frustrated by the storm",
+          "Bored and anxious"
+        ],
+        answer: 0,
+        explanation: "The story concludes: 'Liam left feeling delightfully inspired.'"
+      }
+    ]
+  },
+
+  /* ==================== Exercise 205 (B1 - Part 2) ==================== */
+  {
+    id: 205,
+    level: "B1",
+    levelName: "B1 Intermediate",
+    part: 2,
+    partName: "Part 2 · Monologue and Information",
+    title: "Airport Security and Boarding Call",
+    durationSec: 40,
+    audioText: "May I have your attention, please. This is an urgent boarding announcement for passengers on flight BA four zero eight to Geneva. The departure gate has been relocated from gate fourteen to gate twenty-two B in the north concourse. Priority boarding is now commencing for families traveling with infants and passengers requiring special assistance. Please ensure all liquids over one hundred milliliters are disposed of prior to entering the jet bridge. Boarding will conclude in fifteen minutes. Please have your boarding passes and passports ready for inspection.",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "What is the final destination of flight BA 408?",
+        options: [
+          "Geneva",
+          "Vienna",
+          "Zurich",
+          "Brussels"
+        ],
+        answer: 0,
+        explanation: "...boarding announcement for passengers on flight BA four zero eight to Geneva."
+      },
+      {
+        id: 2,
+        type: "fill_blank",
+        q: "The announcement is addressed to passengers on flight BA ______ .",
+        answer: "408",
+        acceptedAnswers: ["408", "BA 408", "four zero eight", "four hundred eight"],
+        explanation: "...flight BA four zero eight (408) to Geneva."
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        q: "What new gate has been designated for the departure?",
+        options: [
+          "Gate 22B in the north concourse",
+          "Gate 14 in the central terminal",
+          "Gate 12A in the west pier",
+          "Gate 34 in the domestic hall"
+        ],
+        answer: 0,
+        explanation: "The departure gate has been relocated from gate fourteen to gate twenty-two B in the north concourse."
+      },
+      {
+        id: 4,
+        type: "short_answer",
+        q: "What was the original departure gate number before the change?",
+        answer: "Gate 14",
+        acceptedAnswers: ["gate 14", "14", "fourteen", "gate fourteen"],
+        explanation: "...has been relocated from gate fourteen..."
+      },
+      {
+        id: 5,
+        type: "multiple_choice",
+        q: "Which group of travelers is invited to board first under priority boarding?",
+        options: [
+          "Families with infants and passengers needing special assistance",
+          "First-class passengers with heavy carry-on luggage",
+          "Frequent flyer gold members traveling alone",
+          "Passengers seated in the front three rows"
+        ],
+        answer: 0,
+        explanation: "Priority boarding is now commencing for families traveling with infants and passengers requiring special assistance."
+      },
+      {
+        id: 6,
+        type: "true_false",
+        q: "Passengers may bring liquid bottles larger than 100 ml onto the aircraft.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "Please ensure all liquids over one hundred milliliters are disposed of prior to entering the jet bridge."
+      },
+      {
+        id: 7,
+        type: "fill_blank",
+        q: "Boarding for the flight will conclude in ______ minutes.",
+        answer: "15",
+        acceptedAnswers: ["15", "fifteen", "15 minutes"],
+        explanation: "Boarding will conclude in fifteen minutes."
+      },
+      {
+        id: 8,
+        type: "multiple_choice",
+        q: "What two items must passengers prepare for inspection?",
+        options: [
+          "Boarding passes and passports",
+          "Driver's licenses and baggage tags",
+          "Credit cards and printed receipts",
+          "Customs forms and hotel confirmations"
+        ],
+        answer: 0,
+        explanation: "Please have your boarding passes and passports ready for inspection."
+      }
+    ]
+  },
+
+  /* ==================== Exercise 206 (B1 - Part 3) ==================== */
+  {
+    id: 206,
+    level: "B1",
+    levelName: "B1 Intermediate",
+    part: 3,
+    partName: "Part 3 · Academic Discussion",
+    title: "Biology Project Planning",
+    durationSec: 42,
+    audioText: "Hey Ryan, have you outlined our marine biology presentation yet? Yes, Chloe. I was thinking we should examine how rising ocean temperatures affect coral bleaching in the Pacific. That's a compelling angle. If you analyze the scientific data and create the slide charts, I can research the conservation initiatives and draft the speaking script. Sounds like a fair division of labor. Professor Miller expects our preliminary draft by next Thursday, so we should meet at the science library on Tuesday afternoon to combine our slides. Perfect, let's aim for two o'clock.",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "What is the core subject of Chloe and Ryan's biology presentation?",
+        options: [
+          "How ocean warming causes coral bleaching in the Pacific",
+          "The migratory patterns of North Atlantic whales",
+          "Microplastics pollution along European coastlines",
+          "Deep sea hydrothermal vents and bacterial ecosystems"
+        ],
+        answer: 0,
+        explanation: "...examine how rising ocean temperatures affect coral bleaching in the Pacific."
+      },
+      {
+        id: 2,
+        type: "matching",
+        q: "Match each student to their agreed project responsibility:",
+        options: [
+          "Chloe -> Research conservation initiatives and write speaking script",
+          "Ryan -> Analyze scientific data and design slide charts"
+        ],
+        answer: [0, 1],
+        explanation: "Chloe says: 'If you analyze the scientific data and create the slide charts, I can research the conservation initiatives and draft the speaking script.'"
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        q: "Who is the professor supervising their academic project?",
+        options: [
+          "Professor Miller",
+          "Professor Evans",
+          "Professor Clark",
+          "Professor Taylor"
+        ],
+        answer: 0,
+        explanation: "Ryan notes: 'Professor Miller expects our preliminary draft by next Thursday...'"
+      },
+      {
+        id: 4,
+        type: "fill_blank",
+        q: "Their preliminary draft is due to the professor by next ______ .",
+        answer: "Thursday",
+        acceptedAnswers: ["Thursday", "next Thursday"],
+        explanation: "Professor Miller expects our preliminary draft by next Thursday."
+      },
+      {
+        id: 5,
+        type: "multiple_choice",
+        q: "Where do Chloe and Ryan plan to convene to merge their slides?",
+        options: [
+          "At the science library",
+          "In the student union café",
+          "Inside the biology laboratory",
+          "At Chloe's campus apartment"
+        ],
+        answer: 0,
+        explanation: "...we should meet at the science library on Tuesday afternoon to combine our slides."
+      },
+      {
+        id: 6,
+        type: "short_answer",
+        q: "On what day of the week will the partners meet at the library?",
+        answer: "Tuesday",
+        acceptedAnswers: ["Tuesday", "Tuesday afternoon", "on Tuesday"],
+        explanation: "...meet at the science library on Tuesday afternoon."
+      },
+      {
+        id: 7,
+        type: "fill_blank",
+        q: "They agree to meet at ______ o'clock in the afternoon.",
+        answer: "2",
+        acceptedAnswers: ["2", "two", "2:00", "2 pm", "two o'clock"],
+        explanation: "Chloe agrees: 'Perfect, let's aim for two o'clock.'"
+      },
+      {
+        id: 8,
+        type: "true_false",
+        q: "Ryan feels that Chloe's proposal represents an unfair workload for him.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "Ryan explicitly replies: 'Sounds like a fair division of labor.'"
+      }
+    ]
+  },
+
+  /* ==================== Exercise 207 (B1 - Part 5) ==================== */
+  {
+    id: 207,
+    level: "B1",
+    levelName: "B1 Intermediate",
+    part: 5,
+    partName: "Part 5 · Opinions and Attitudes",
+    title: "Remote Work vs Office Life",
+    durationSec: 40,
+    audioText: "Sarah, do you really prefer working remotely full-time over coming into the headquarters? Honestly, Jason, cutting out a ninety-minute daily commute has completely transformed my productivity and sleep quality. I can focus deeply without constant office chatter. I acknowledge the commute is dreadful, Sarah, but I find spontaneous brainstorms and whiteboard sessions far more creative in person. Video calls feel somewhat stiff. That's true, Jason. Perhaps a hybrid schedule — two days in the office for team collaboration and three days at home for concentrated tasks — offers the optimal compromise.",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "How long was Sarah's daily round-trip commute before remote work?",
+        options: [
+          "Ninety minutes",
+          "Forty-five minutes",
+          "Two hours",
+          "Thirty minutes"
+        ],
+        answer: 0,
+        explanation: "...cutting out a ninety-minute daily commute has completely transformed my productivity."
+      },
+      {
+        id: 2,
+        type: "true_false",
+        q: "Sarah believes that working from home has improved both her productivity and sleep.",
+        options: ["True", "False"],
+        answer: "True",
+        explanation: "Sarah states it 'has completely transformed my productivity and sleep quality.'"
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        q: "What disturbance does Sarah dislike about working in the physical office?",
+        options: [
+          "Constant office chatter disrupting deep concentration",
+          "Uncomfortable office furniture and lighting",
+          "Unreliable office internet connection",
+          "Cold temperatures in the meeting rooms"
+        ],
+        answer: 0,
+        explanation: "'I can focus deeply without constant office chatter.'"
+      },
+      {
+        id: 4,
+        type: "multiple_choice",
+        q: "What valuable aspect of office work does Jason defend?",
+        options: [
+          "Spontaneous brainstorming and creative in-person sessions",
+          "Complimentary cafeteria lunches and coffee",
+          "Better physical workout facilities",
+          "Access to company printing equipment"
+        ],
+        answer: 0,
+        explanation: "Jason finds 'spontaneous brainstorms and whiteboard sessions far more creative in person.'"
+      },
+      {
+        id: 5,
+        type: "fill_blank",
+        q: "Jason remarks that online video calls often feel somewhat ______ .",
+        answer: "stiff",
+        acceptedAnswers: ["stiff", "somewhat stiff", "rigid", "unnatural"],
+        explanation: "Jason observes: 'Video calls feel somewhat stiff.'"
+      },
+      {
+        id: 6,
+        type: "short_answer",
+        q: "What work arrangement does Sarah suggest as the best compromise?",
+        answer: "a hybrid schedule",
+        acceptedAnswers: ["hybrid schedule", "hybrid", "a hybrid schedule", "hybrid model"],
+        explanation: "'Perhaps a hybrid schedule... offers the optimal compromise.'"
+      },
+      {
+        id: 7,
+        type: "multiple_choice",
+        q: "In the proposed hybrid model, how many days would be spent working from home?",
+        options: [
+          "Three days",
+          "Two days",
+          "Four days",
+          "One day"
+        ],
+        answer: 0,
+        explanation: "...two days in the office for team collaboration and three days at home for concentrated tasks."
+      },
+      {
+        id: 8,
+        type: "true_false",
+        q: "Jason thinks daily commuting is an enjoyable experience.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "Jason explicitly admits: 'I acknowledge the commute is dreadful...'"
+      }
+    ]
+  },
+
+  /* ==================== Exercise 208 (B2 - Part 3) ==================== */
+  {
+    id: 208,
+    level: "B2",
+    levelName: "B2 Upper-Intermediate",
+    part: 3,
+    partName: "Part 3 · Academic Discussion",
+    title: "Analyzing Renewable Energy Solutions",
+    durationSec: 44,
+    audioText: "In assessing municipal grid decarbonization, offshore wind developments present a higher capacity factor than photovoltaic arrays. However, Professor Henderson argued in seminar that intermittent generation remains problematic without grid-scale battery storage. Indeed, lithium-iron-phosphate battery installations have dropped in cost by forty percent over five years, yet supply chain bottlenecks for critical minerals persist. Furthermore, local maritime communities frequently contest offshore turbine leases due to disrupted commercial fishing lanes. Therefore, sustainable modernization demands not merely engineering innovation, but rigorous socio-ecological stakeholder consensus before capital allocation.",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "Why does offshore wind possess an operational advantage over solar photovoltaic arrays?",
+        options: [
+          "It delivers a noticeably higher capacity factor",
+          "It requires zero capital investment for transmission lines",
+          "It completely avoids all mechanical wear and tear",
+          "It can be deployed on agricultural farmland"
+        ],
+        answer: 0,
+        explanation: "'...offshore wind developments present a higher capacity factor than photovoltaic arrays.'"
+      },
+      {
+        id: 2,
+        type: "fill_blank",
+        q: "Professor Henderson emphasized that ______ generation is problematic without battery storage.",
+        answer: "intermittent",
+        acceptedAnswers: ["intermittent", "variable", "irregular"],
+        explanation: "'...intermittent generation remains problematic without grid-scale battery storage.'"
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        q: "By what percentage have lithium-iron-phosphate battery costs declined across five years?",
+        options: [
+          "By forty percent",
+          "By twenty-five percent",
+          "By sixty percent",
+          "By fifty percent"
+        ],
+        answer: 0,
+        explanation: "...battery installations have dropped in cost by forty percent over five years."
+      },
+      {
+        id: 4,
+        type: "short_answer",
+        q: "What obstacle continues to limit battery deployment despite falling prices?",
+        answer: "supply chain bottlenecks",
+        acceptedAnswers: ["supply chain bottlenecks", "bottlenecks", "critical minerals bottlenecks", "supply chain"],
+        explanation: "...yet supply chain bottlenecks for critical minerals persist."
+      },
+      {
+        id: 5,
+        type: "multiple_choice",
+        q: "Why do local coastal communities frequently object to offshore wind leases?",
+        options: [
+          "Turbines disrupt commercial fishing lanes",
+          "Turbines generate unpleasant low-frequency noise",
+          "Underwater cables disrupt coastal tourism hotels",
+          "Turbines reduce real estate tax revenue"
+        ],
+        answer: 0,
+        explanation: "...frequently contest offshore turbine leases due to disrupted commercial fishing lanes."
+      },
+      {
+        id: 6,
+        type: "true_false",
+        q: "The speaker argues that pure engineering ingenuity is enough to successfully modernize the grid.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "...demands not merely engineering innovation, but rigorous socio-ecological stakeholder consensus."
+      },
+      {
+        id: 7,
+        type: "fill_blank",
+        q: "Sustainable modernization requires rigorous socio-ecological ______ consensus before investing.",
+        answer: "stakeholder",
+        acceptedAnswers: ["stakeholder", "stakeholders"],
+        explanation: "...rigorous socio-ecological stakeholder consensus before capital allocation."
+      },
+      {
+        id: 8,
+        type: "multiple_choice",
+        q: "What is the primary conclusion regarding sustainable energy modernization?",
+        options: [
+          "Engineering upgrades must be coupled with environmental and communal consensus",
+          "Offshore wind must be abandoned in favor of fossil backups",
+          "Local fishing communities should have no regulatory power",
+          "Battery storage is too unreliable to merit further investment"
+        ],
+        answer: 0,
+        explanation: "The conclusion stresses balancing engineering with stakeholder consensus and ecology."
+      }
+    ]
+  },
+
+  /* ==================== Exercise 209 (B2 - Part 4) ==================== */
+  {
+    id: 209,
+    level: "B2",
+    levelName: "B2 Upper-Intermediate",
+    part: 4,
+    partName: "Part 4 · Lecture or Educational Talk",
+    title: "The Psychology of Habit Formation",
+    durationSec: 43,
+    audioText: "Neurological investigations demonstrate that habitual actions are governed by an automatic cognitive feedback loop consisting of three phases: the cue, the routine, and the reward. When the brain detects a situational trigger, it offloads behavioral control from the prefrontal cortex to the basal ganglia, thereby conserving metabolic energy. Contrary to conventional folklore, instilling a new automatic behavior rarely takes twenty-one days; empirical research suggests an average of sixty-six days depending on complexity. Crucially, sustainable habit transformation succeeds through incremental cue adjustment and immediate intrinsic reward rather than relying upon erratic reserves of conscious willpower.",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "What three sequential components comprise the cognitive habit loop?",
+        options: [
+          "The cue, the routine, and the reward",
+          "The trigger, the anxiety, and the release",
+          "The intention, the effort, and the outcome",
+          "The stimulus, the memory, and the regret"
+        ],
+        answer: 0,
+        explanation: "...automatic cognitive feedback loop consisting of three phases: the cue, the routine, and the reward."
+      },
+      {
+        id: 2,
+        type: "multiple_choice",
+        q: "To which brain structure does cognitive control shift during habitual behavior?",
+        options: [
+          "The basal ganglia",
+          "The prefrontal cortex",
+          "The hippocampus",
+          "The temporal lobe"
+        ],
+        answer: 0,
+        explanation: "...it offloads behavioral control from the prefrontal cortex to the basal ganglia."
+      },
+      {
+        id: 3,
+        type: "fill_blank",
+        q: "The brain shifts control to the basal ganglia to conserve metabolic ______ .",
+        answer: "energy",
+        acceptedAnswers: ["energy", "metabolic energy"],
+        explanation: "...offloads behavioral control... thereby conserving metabolic energy."
+      },
+      {
+        id: 4,
+        type: "true_false",
+        q: "Scientific research validates the popular myth that any habit forms in exactly 21 days.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "Contrary to conventional folklore, instilling a new automatic behavior rarely takes twenty-one days..."
+      },
+      {
+        id: 5,
+        type: "short_answer",
+        q: "What is the average number of days required to establish an automatic behavior?",
+        answer: "66",
+        acceptedAnswers: ["66", "sixty-six", "66 days"],
+        explanation: "...empirical research suggests an average of sixty-six days depending on complexity."
+      },
+      {
+        id: 6,
+        type: "ordering",
+        q: "Arrange the three phases of the habit loop in their physiological order of execution:",
+        options: [
+          "Detection of a situational trigger (The Cue)",
+          "Performance of the automated behavior (The Routine)",
+          "Reception of positive feedback (The Reward)"
+        ],
+        answer: [0, 1, 2],
+        explanation: "The text establishes the clear chronological sequence: cue -> routine -> reward."
+      },
+      {
+        id: 7,
+        type: "multiple_choice",
+        q: "What approach is recommended for sustainable behavioral change?",
+        options: [
+          "Incremental cue adjustments and immediate intrinsic rewards",
+          "Total reliance on intense conscious willpower",
+          "Imposing harsh punishments for any failure",
+          "Attempting multiple complex habits simultaneously"
+        ],
+        answer: 0,
+        explanation: "...succeeds through incremental cue adjustment and immediate intrinsic reward rather than relying upon erratic reserves of conscious willpower."
+      },
+      {
+        id: 8,
+        type: "true_false",
+        q: "The lecturer characterizes conscious willpower as a steady and inexhaustible resource.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "The speaker refers to 'erratic reserves of conscious willpower.'"
+      }
+    ]
+  },
+
+  /* ==================== Exercise 210 (B2 - Part 5) ==================== */
+  {
+    id: 210,
+    level: "B2",
+    levelName: "B2 Upper-Intermediate",
+    part: 5,
+    partName: "Part 5 · Opinions and Attitudes",
+    title: "Urban Architecture and Public Spaces",
+    durationSec: 44,
+    audioText: "Elena, municipal councils too frequently prioritize commercial retail developments over green commons when regenerating waterfront districts. Do you concur? Unequivocally, Julian. When open plazas are privatized, security personnel restrict non-commercial gatherings, creating subtle social exclusion. Yet developers argue that premium commercial retail tenants generate the ongoing tax revenue required to maintain public infrastructure and sanitation. True, but public health data proves that accessible urban green corridors deliver massive long-term economic dividends by reducing respiratory ailments and mitigating urban heat islands. Financial return must be balanced against universal civic accessibility.",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "What common complaint do Julian and Elena share regarding waterfront redevelopments?",
+        options: [
+          "Councils over-prioritize commercial retail over open green spaces",
+          "New pedestrian promenades have excessive vehicle traffic",
+          "There is an insufficient number of parking garages",
+          "Modern architectural designs look too historical"
+        ],
+        answer: 0,
+        explanation: "...too frequently prioritize commercial retail developments over green commons when regenerating waterfront districts."
+      },
+      {
+        id: 2,
+        type: "true_false",
+        q: "Elena strongly disagrees with Julian's observation.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "Elena responds: 'Unequivocally, Julian.' (Meaning she agrees without doubt)."
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        q: "What social harm occurs when public plazas are privatized?",
+        options: [
+          "Security guards restrict non-commercial gatherings, causing social exclusion",
+          "Surrounding property taxes triple immediately",
+          "Bicycle lanes are forced to shut down",
+          "Public libraries lose their municipal funding"
+        ],
+        answer: 0,
+        explanation: "...security personnel restrict non-commercial gatherings, creating subtle social exclusion."
+      },
+      {
+        id: 4,
+        type: "fill_blank",
+        q: "Developers claim that commercial retail tenants produce essential tax ______ .",
+        answer: "revenue",
+        acceptedAnswers: ["revenue", "revenues", "income"],
+        explanation: "...commercial retail tenants generate the ongoing tax revenue required to maintain public infrastructure."
+      },
+      {
+        id: 5,
+        type: "short_answer",
+        q: "What respiratory benefit do accessible urban green corridors deliver?",
+        answer: "reducing respiratory ailments",
+        acceptedAnswers: ["reducing respiratory ailments", "respiratory ailments", "lower respiratory illness", "respiratory health"],
+        explanation: "...by reducing respiratory ailments and mitigating urban heat islands."
+      },
+      {
+        id: 6,
+        type: "multiple_choice",
+        q: "What environmental urban challenge is mitigated by green corridors?",
+        options: [
+          "Urban heat islands",
+          "Coastal tidal surges",
+          "Excessive ambient fog",
+          "Heavy winter snowfall"
+        ],
+        answer: 0,
+        explanation: "...reducing respiratory ailments and mitigating urban heat islands."
+      },
+      {
+        id: 7,
+        type: "fill_blank",
+        q: "Elena concludes that financial return must be balanced against universal ______ accessibility.",
+        answer: "civic",
+        acceptedAnswers: ["civic", "public", "community"],
+        explanation: "Financial return must be balanced against universal civic accessibility."
+      },
+      {
+        id: 8,
+        type: "multiple_choice",
+        q: "What is Elena's core philosophy regarding urban planning investments?",
+        options: [
+          "Public health benefits and civic access yield immense long-term communal value",
+          "Immediate commercial rental yields are always paramount",
+          "Waterfront regeneration should be suspended permanently",
+          "Private companies should own and police all city plazas"
+        ],
+        answer: 0,
+        explanation: "Elena argues that public health dividends and universal civic access must balance financial returns."
+      }
+    ]
+  },
+
+  /* ==================== Exercise 211 (C1 - Part 4) ==================== */
+  {
+    id: 211,
+    level: "C1",
+    levelName: "C1 Advanced",
+    part: 4,
+    partName: "Part 4 · Lecture or Educational Talk",
+    title: "Artificial Intelligence in Modern Medicine",
+    durationSec: 45,
+    audioText: "In contemporary biomedical informatics, deep neural networks have achieved diagnostic parity with senior radiologists in detecting pulmonary nodules and ocular microvascular anomalies. Nonetheless, translating algorithmic efficacy into clinical practice encounters formidable epistemological hurdles. Predominantly, the opacity of multi-layered predictive models — often dubbed the 'black box' conundrum — impedes clinician trust and clouds liability frameworks. When an algorithmic recommendation diverges from medical consensus, clinicians must discern between serendipitous pattern detection and insidious computational artifact. Therefore, the immediate regulatory frontier mandates explainable artificial intelligence alongside comprehensive clinician-in-the-loop oversight rather than uncritical algorithmic deference.",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "In which diagnostic domains have deep neural networks matched expert radiologists?",
+        options: [
+          "Detecting pulmonary nodules and ocular microvascular anomalies",
+          "Classifying complex pediatric femur fractures exclusively",
+          "Monitoring arterial stent elasticity in real time",
+          "Evaluating subconscious depressive mental oscillations"
+        ],
+        answer: 0,
+        explanation: "...achieved diagnostic parity with senior radiologists in detecting pulmonary nodules and ocular microvascular anomalies."
+      },
+      {
+        id: 2,
+        type: "fill_blank",
+        q: "The inherent opacity of deep predictive models is widely known as the '______ box' conundrum.",
+        answer: "black",
+        acceptedAnswers: ["black", "black box"],
+        explanation: "...the opacity of multi-layered predictive models — often dubbed the 'black box' conundrum..."
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        q: "What two critical obstacles are created by model opacity?",
+        options: [
+          "Erosion of clinician trust and ambiguous legal liability frameworks",
+          "Excessive computational electricity bills and heat generation",
+          "Slow network image upload speeds across hospital intranets",
+          "Incompatibility with standard electronic medical record formats"
+        ],
+        answer: 0,
+        explanation: "...impedes clinician trust and clouds liability frameworks."
+      },
+      {
+        id: 4,
+        type: "short_answer",
+        q: "What must clinicians discern when an algorithm diverges from established consensus?",
+        answer: "computational artifact",
+        acceptedAnswers: ["computational artifact", "insidious computational artifact", "artifact vs pattern", "distinguishing pattern from artifact"],
+        explanation: "...discern between serendipitous pattern detection and insidious computational artifact."
+      },
+      {
+        id: 5,
+        type: "true_false",
+        q: "The speaker advocates for replacing human doctors completely with autonomous AI algorithms.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "The speaker rejects 'uncritical algorithmic deference' and mandates clinician-in-the-loop oversight."
+      },
+      {
+        id: 6,
+        type: "fill_blank",
+        q: "Regulatory frameworks mandate explainable AI and clinician-in-the-______ oversight.",
+        answer: "loop",
+        acceptedAnswers: ["loop", "clinician in the loop", "clinician-in-the-loop"],
+        explanation: "...mandates explainable artificial intelligence alongside comprehensive clinician-in-the-loop oversight."
+      },
+      {
+        id: 7,
+        type: "multiple_choice",
+        q: "What does the term 'diagnostic parity' signify in clinical literature?",
+        options: [
+          "Achieving an equivalent level of diagnostic accuracy as human experts",
+          "Reducing hospital diagnostic operating expenditures by half",
+          "Diagnosing twice as many patients per hour of work",
+          "Eliminating the necessity for secondary lab validation"
+        ],
+        answer: 0,
+        explanation: "Diagnostic parity means matching the diagnostic accuracy benchmark of specialist doctors."
+      },
+      {
+        id: 8,
+        type: "multiple_choice",
+        q: "What is the primary thesis articulated by the speaker?",
+        options: [
+          "Clinical AI integration necessitates explainability, regulatory safeguards, and continuous human oversight",
+          "Neural networks are far too inaccurate for medical applications and should be banned",
+          "Radiologists should immediately delegate all imaging diagnostics to software",
+          "Medical liability should reside exclusively with machine learning software developers"
+        ],
+        answer: 0,
+        explanation: "The speaker synthesizes algorithmic capability with explainability, liability, and clinician-in-the-loop oversight."
+      }
+    ]
+  },
+
+  /* ==================== Exercise 212 (C1 - Part 6) ==================== */
+  {
+    id: 212,
+    level: "C1",
+    levelName: "C1 Advanced",
+    part: 6,
+    partName: "Part 6 · Short Story and Narrative",
+    title: "The Forgotten Mountain Expedition",
+    durationSec: 45,
+    audioText: "At five thousand meters on the eastern spur of Mount Lhotse, our meteorological instruments began registering an abrupt atmospheric pressure plunge. Dense whiteout conditions materialized within twenty minutes, annihilating all terrestrial landmarks and rendering our satellite positioning intermittent. Confronted with plunging sub-zero temperatures and imminent crevasse danger, team leader Marcus made the agonizing decision to abort the summit push and bivouac inside a shallow glacial bergschrund. For eighteen harrowing hours, we anchored our harnesses into brittle blue ice, enduring gale-force gusts exceeding ninety knots. When morning broke with crystalline serenity, survival felt less like an achievement than a profound lesson in humbleness.",
+    questions: [
+      {
+        id: 1,
+        type: "multiple_choice",
+        q: "At what elevation on Mount Lhotse were the climbers when the crisis erupted?",
+        options: [
+          "Five thousand meters",
+          "Three thousand five hundred meters",
+          "Seven thousand two hundred meters",
+          "Six thousand meters"
+        ],
+        answer: 0,
+        explanation: "'At five thousand meters on the eastern spur of Mount Lhotse...'"
+      },
+      {
+        id: 2,
+        type: "fill_blank",
+        q: "The team's scientific instruments detected an abrupt atmospheric ______ plunge.",
+        answer: "pressure",
+        acceptedAnswers: ["pressure", "atmospheric pressure"],
+        explanation: "...instruments began registering an abrupt atmospheric pressure plunge."
+      },
+      {
+        id: 3,
+        type: "short_answer",
+        q: "How rapidly did dense whiteout conditions engulf the mountain spur?",
+        answer: "within 20 minutes",
+        acceptedAnswers: ["within 20 minutes", "20 minutes", "twenty minutes", "within twenty minutes"],
+        explanation: "Dense whiteout conditions materialized within twenty minutes..."
+      },
+      {
+        id: 4,
+        type: "ordering",
+        q: "Chronologically sequence the key events in the survival narrative (1 to 4):",
+        options: [
+          "Meteorological instruments recorded an abrupt atmospheric pressure drop",
+          "Whiteout erased landmarks and satellite signals faltered",
+          "The team aborted the summit attempt to shelter in a glacial crevice",
+          "The team endured eighteen hours anchored to ice during a violent blizzard"
+        ],
+        answer: [0, 1, 2, 3],
+        explanation: "The story follows this exact order: instrument warning -> whiteout -> decision to abort & shelter -> 18-hour storm survival."
+      },
+      {
+        id: 5,
+        type: "multiple_choice",
+        q: "Where did the expedition team seek shelter during the blizzard?",
+        options: [
+          "Inside a shallow glacial bergschrund",
+          "In a prefabricated aluminum high-altitude hut",
+          "Under a natural granite rock overhang",
+          "Inside portable double-walled expedition tents"
+        ],
+        answer: 0,
+        explanation: "...bivouac inside a shallow glacial bergschrund."
+      },
+      {
+        id: 6,
+        type: "true_false",
+        q: "Team leader Marcus insisted on continuing to the summit despite the severe storm.",
+        options: ["True", "False"],
+        answer: "False",
+        explanation: "Marcus made the agonizing decision to 'abort the summit push.'"
+      },
+      {
+        id: 7,
+        type: "fill_blank",
+        q: "The climbers endured gale-force gusts exceeding ______ knots.",
+        answer: "90",
+        acceptedAnswers: ["90", "ninety", "90 knots"],
+        explanation: "...enduring gale-force gusts exceeding ninety knots."
+      },
+      {
+        id: 8,
+        type: "multiple_choice",
+        q: "What enduring philosophical lesson did the narrator derive from surviving the ordeal?",
+        options: [
+          "Survival was a profound lesson in humbleness before nature's power",
+          "Extreme weather can be easily predicted with modern technology",
+          "Climbing mountains without supplementary oxygen is foolish",
+          "Summiting is always worth any personal physical risk"
+        ],
+        answer: 0,
+        explanation: "The story concludes: '...survival felt less like an achievement than a profound lesson in humbleness.'"
+      }
+    ]
+  }
+];
+
+
 // Browser global va Node module eksportini qo'llab-quvvatlash
 if (typeof window !== 'undefined') {
   window.TOPICS = TOPICS;
   window.READING_TOPICS = READING_TOPICS;
+  window.LISTENING_EXERCISES = LISTENING_EXERCISES;
 }
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { TOPICS, READING_TOPICS };
+  module.exports = { TOPICS, READING_TOPICS, LISTENING_EXERCISES };
 }
