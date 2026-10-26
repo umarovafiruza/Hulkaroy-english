@@ -255,7 +255,7 @@
               <span class="player-pulse-dot" id="playerPulseDot"></span>
               <span class="player-status-text" id="playerStatusText">Audio tayyor</span>
             </div>
-            <div class="player-voice-tag">Natural Native Voice · Female</div>
+            <div class="player-voice-tag" id="playerVoiceBadge">Ovoz: Natural Female · US</div>
           </div>
 
           <!-- Waveform visualizer bars -->
@@ -297,6 +297,18 @@
                 <button class="btn-speed-opt" data-speed="1.2" type="button">1.2x</button>
               </div>
             </div>
+          </div>
+
+          <!-- Voice Accent & Preview Row -->
+          <div class="player-voice-row" id="playerVoiceRow">
+            <div class="voice-accent-toggle" id="voiceAccentToggle" role="radiogroup" aria-label="Aksent tanlash">
+              <span class="voice-accent-label">Aksent:</span>
+              <button class="btn-accent-opt active" data-accent="US" type="button" aria-label="American English">🇺🇸 US Natural</button>
+              <button class="btn-accent-opt" data-accent="UK" type="button" aria-label="British English">🇬🇧 UK Natural</button>
+            </div>
+            <button class="btn-voice-preview" id="listeningPreviewBtn" type="button" title="Tanlangan ovozni sinab ko'rish">
+              <span class="preview-icon">▶</span> Ovozni sinash
+            </button>
           </div>
 
           <div class="player-hint" id="playerHint">

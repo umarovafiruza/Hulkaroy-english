@@ -1956,10 +1956,85 @@ input[type=range]::-moz-range-thumb {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.player-hint {
-  margin-top: 18px;
+/* Voice Accent & Preview Row */
+.player-voice-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid var(--line);
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.voice-accent-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.voice-accent-label {
+  font-weight: 500;
+  margin-right: 2px;
+}
+
+.btn-accent-opt {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background-color: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-accent-opt:hover {
+  border-color: var(--ink);
+}
+
+.btn-accent-opt.active {
+  background-color: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.btn-voice-preview {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background-color: var(--soft);
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-voice-preview:hover {
+  border-color: var(--ink);
+  background-color: var(--bg);
+}
+
+.btn-voice-preview.playing {
+  background-color: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.player-hint {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
   font-size: 12px;
   color: var(--muted);
   line-height: 1.45;

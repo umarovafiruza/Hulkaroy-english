@@ -25,6 +25,13 @@ Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, 
 
 ### 3. Listening Bo'limi (Professional Audio Practice & Comprehension)
 - **CEFR Darajalari bo'yicha Tizimlashtirilgan**: A1 (Beginner), A2 (Elementary), B1 (Intermediate), B2 (Upper-Intermediate) va C1 (Advanced) darajalaridagi 12 ta to'liq audio mashq.
+- **Natural Neural Ovoz Texnologiyasi (Natural Female Native Speakers)**:
+  - Eski mexanik/robotik desktop SAPI5 sintezatorlar filtrlangan va ularning o'rniga zamonaviy onlayn tabiiy neyron ovozlar (`Microsoft Jenny (Natural)`, `Aria (Natural)`, `Google US English`, `Microsoft Sonia (Natural) UK`, `Libby (Natural) UK`) integratsiya qilingan.
+  - **Aksent Tanlash Imkoniyati**: Foydalanuvchi audio pleerda istalgan payt **🇺🇸 US Natural** (Amerika) va **🇬🇧 UK Natural** (Britaniya) talaffuzini bir bosishda tanlay oladi.
+  - **"Ovozni sinash" (Voice Preview)**: Audio mashqni boshlashdan avval ovoz sifati va intonatsiyasini 4 soniyalik professional ta'limiy kirish nutqi orqali tekshirib ko'rish imkoniyati.
+  - **Chromium Nutq Muzlashini Oldini Olish (Keep-Alive Engine)**: Chromium brauzerlaridagi 15 soniyadan ortiq nutqning to'xtab qolish xatosini bartaraf etuvchi avtomatik keep-alive mexanizmi.
+  - **Haqiqiy So'z Sinxronizatsiyasi (Boundary Tracking)**: Audio davomiyligi va progress bari nutqdagi so'zlar bilan real vaqtda aniq sinxronlashadi.
+  - **Ikki Bosqichli Arxitektura (Dual-mode)**: Tayyor audio fayllar (`audioUrl` / `audioFile`) mavjud bo'lsa HTML5 Audio orqali, aks holda yuqori sifatli tabiiy nutq sintezi orqali ishlaydi.
 - **6 ta Realistik Mashq Formati (Part 1–6)**:
   - *Part 1 — Everyday Conversations*: Kundalik suhbatlar (uchrashuv vaqtlari, yo'nalishlar, xaridlar).
   - *Part 2 — Monologue and Information*: E'lonlar, xizmat ko'rsatish va yo'riqnomalar.
@@ -37,7 +44,7 @@ Loyihada hech qanday framework yoki backend ishlatilmagan — faqat sof **HTML, 
   - Interaktiv va seekable progress bar (istalgan soniyaga o'tish).
   - Jonli animatsiyali Waveform indikatori.
   - Tezlikni boshqarish: `0.8x`, `1.0x`, `1.2x`.
-  - Tabiiy native ayol ovozida o'qish (Web Speech API).
+  - Ovoz va aksent holati indikatori (`Ovoz: Jenny (Natural) · US`).
 - **Har bir Mashqda Aniq 8 ta Savol (Jami 96 ta savol)**:
   - Multiple Choice (A, B, C, D)
   - True / False
@@ -72,12 +79,6 @@ Hulkaroy-english/
 ├── data.js          # Shadowing, Reading (300 savol) va Listening (96 savol) ma'lumotlar bazasi
 └── README.md        # Loyiha haqida to'liq texnik hujjat
 ```
-
----
-
-## Ishga tushirish
-
-Hech qanday o'rnatish yoki build qilish talab etilmaydi. Shunchaki `index.html` faylini istalgan zamonaviy brauzerda oching.
 
 ---
 

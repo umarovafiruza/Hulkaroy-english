@@ -121,6 +121,9 @@
   const listeningSpeedSelectorEl = $('listeningSpeedSelector');
   const listeningVolToggleBtn = $('listeningVolToggle');
   const volIconEl = $('volIcon');
+  const playerVoiceBadgeEl = $('playerVoiceBadge');
+  const voiceAccentToggleEl = $('voiceAccentToggle');
+  const listeningPreviewBtn = $('listeningPreviewBtn');
 
   const listeningQuizSectionEl = $('listeningQuizSection');
   const listeningQuizProgressTextEl = $('listeningQuizProgressText');
@@ -222,6 +225,18 @@
       const avgPct = totalPossible > 0 ? Math.round((totalScore / totalPossible) * 100) : 0;
       const bestPct = Math.max(...records.map((r) => r.pct || 0));
       return { count, avg: avgPct, best: bestPct };
+    },
+    getListeningAccent() {
+      try {
+        const acc = localStorage.getItem('sf_listening_accent');
+        if (acc === 'UK' || acc === 'US') return acc;
+      } catch (e) {}
+      return 'US';
+    },
+    setListeningAccent(acc) {
+      try {
+        localStorage.setItem('sf_listening_accent', acc);
+      } catch (e) {}
     },
     getVocab() {
       try {
@@ -1752,7 +1767,7 @@
   quizFinishBtn.addEventListener('click', exitReading);
 
   /* ==========================================================================
-     Listening (Audio Tinglash, Ovoz, Pleyer va 8 ta Savol) Mantiqi
+     Listening (Audio Tinglash, Natural Neural Voice, Pleyer va 8 ta Savol)
      ========================================================================== */
   let currentListeningExercise = null;
   let currentQIndex = 0; // 0..7
@@ -1765,36 +1780,222 @@
   let audioState = 'idle'; // 'idle' | 'playing' | 'paused' | 'ended'
   let currentUtterance = null;
 
-  function getNativeFemaleVoice() {
-    if (!('speechSynthesis' in window)) return null;
-    const voices = window.speechSynthesis.getVoices();
-    if (!voices || voices.length === 0) return null;
-
-    const preferred = [
-      'Google US English', 'Microsoft Zira', 'Samantha', 'Victoria', 'Karen',
-      'Tessa', 'Moira', 'Fiona', 'Veena', 'en-US-Standard-C', 'en-US-Neural2-F'
-    ];
-    for (const name of preferred) {
-      const match = voices.find((v) => v.name.toLowerCase().includes(name.toLowerCase()));
-      if (match) return match;
-    }
-
-    const enVoices = voices.filter((v) => v.lang && v.lang.startsWith('en'));
-    const female = enVoices.find((v) => /female|woman|girl/i.test(v.name));
-    if (female) return female;
-
-    const usVoice = voices.find((v) => v.lang === 'en-US');
-    if (usVoice) return usVoice;
-
-    return enVoices[0] || voices[0] || null;
+  function prepareNaturalText(rawText) {
+    if (!rawText) return '';
+    return rawText
+      .replace(/\r\n/g, '\n')
+      .replace(/\s+/g, ' ')
+      .replace(/\s*([,.;:!?])\s*/g, '$1 ')
+      .replace(/\s*-\s*/g, ' — ')
+      .trim();
   }
 
+  const ListeningAudioEngine = {
+    audioElement: null,
+    currentUtterance: null,
+    voices: [],
+    voicesReady: false,
+    selectedAccent: store.getListeningAccent ? store.getListeningAccent() : 'US',
+    activeVoice: null,
+    keepAliveInterval: null,
+    textLength: 0,
+
+    init() {
+      this.selectedAccent = store.getListeningAccent ? store.getListeningAccent() : 'US';
+      this.loadVoices();
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          this.loadVoices();
+        };
+      }
+    },
+
+    loadVoices() {
+      if (!('speechSynthesis' in window)) return;
+      this.voices = window.speechSynthesis.getVoices() || [];
+      if (this.voices.length > 0) {
+        this.voicesReady = true;
+        this.activeVoice = this.pickBestNaturalVoice(this.selectedAccent);
+        this.updateVoiceUI();
+      }
+    },
+
+    pickBestNaturalVoice(preferredAccent = 'US') {
+      if (!this.voices || this.voices.length === 0) return null;
+      const targetLang = (preferredAccent === 'UK') ? 'en-gb' : 'en-us';
+
+      function scoreVoice(v) {
+        const name = (v.name || '').toLowerCase();
+        const lang = (v.lang || '').replace('_', '-').toLowerCase();
+        let score = 0;
+
+        // Language matching
+        if (preferredAccent === 'UK') {
+          if (lang === 'en-gb') score += 120;
+          else if (lang.startsWith('en')) score += 30;
+          else return -1000;
+        } else {
+          if (lang === 'en-us') score += 120;
+          else if (lang.startsWith('en')) score += 30;
+          else return -1000;
+        }
+
+        // CRITICAL: Heavily penalize and exclude legacy mechanical desktop SAPI voices
+        if (name.includes('desktop') || name.includes('sapi') || name.includes('david') || name.includes('zira desktop') || name.includes('hazel')) {
+          score -= 600;
+        }
+
+        // Ultra-Natural Neural online voices (Edge Natural / Chrome Neural / Siri / Apple Enhanced)
+        if (name.includes('(natural)') || name.includes('natural')) score += 400;
+        if (name.includes('neural')) score += 350;
+        if (name.includes('online')) score += 200;
+        if (name.includes('enhanced') || name.includes('premium')) score += 250;
+
+        // Specific high-quality native female voices
+        if (preferredAccent === 'UK') {
+          if (name.includes('sonia')) score += 300;
+          if (name.includes('libby')) score += 280;
+          if (name.includes('maisie')) score += 260;
+          if (name.includes('google uk english female')) score += 250;
+          if (name.includes('victoria')) score += 150;
+        } else {
+          if (name.includes('jenny')) score += 300;
+          if (name.includes('aria')) score += 290;
+          if (name.includes('ava')) score += 280;
+          if (name.includes('google us english')) score += 250;
+          if (name.includes('samantha')) score += 180;
+        }
+
+        // Gender matching
+        if (/female|woman|girl/i.test(name)) score += 60;
+        if (/male|man|boy/i.test(name) && !name.includes('female')) score -= 120;
+
+        return score;
+      }
+
+      const eligible = this.voices
+        .filter((v) => (v.lang || '').toLowerCase().startsWith('en'))
+        .map((v) => ({ voice: v, score: scoreVoice(v) }))
+        .sort((a, b) => b.score - a.score);
+
+      return eligible.length > 0 ? eligible[0].voice : null;
+    },
+
+    setAccent(accent) {
+      this.selectedAccent = accent;
+      if (store.setListeningAccent) store.setListeningAccent(accent);
+      this.activeVoice = this.pickBestNaturalVoice(accent);
+      this.updateVoiceUI();
+      if (audioState === 'playing') {
+        startAudioPlayback();
+      }
+    },
+
+    updateVoiceUI() {
+      const badgeEl = $('playerVoiceBadge');
+      if (badgeEl) {
+        if (this.activeVoice) {
+          const cleanName = this.activeVoice.name
+            .replace('Microsoft ', '')
+            .replace(' Online (Natural)', ' (Natural)')
+            .replace(' Desktop', '')
+            .replace(' - English (United States)', '')
+            .replace(' - English (United Kingdom)', '');
+          badgeEl.textContent = `Ovoz: ${cleanName} · ${this.selectedAccent}`;
+        } else {
+          badgeEl.textContent = `Ovoz: Natural Female · ${this.selectedAccent}`;
+        }
+      }
+      const accentBtns = document.querySelectorAll('.btn-accent-opt');
+      accentBtns.forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.accent === this.selectedAccent);
+      });
+    },
+
+    playPreview() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      this.stop();
+
+      const previewText = (this.selectedAccent === 'UK')
+        ? "Hello! Welcome to your British English listening practice. Let's explore realistic conversations and sharpen your comprehension together."
+        : "Hello! Welcome to your American English listening practice. Let's explore realistic conversations and sharpen your comprehension together.";
+
+      const utt = new SpeechSynthesisUtterance(previewText);
+      const voice = this.activeVoice || this.pickBestNaturalVoice(this.selectedAccent);
+      if (voice) utt.voice = voice;
+      utt.lang = (this.selectedAccent === 'UK') ? 'en-GB' : 'en-US';
+      utt.rate = 0.96;
+      utt.pitch = 1.0;
+      utt.volume = isMuted ? 0 : 1;
+
+      const previewBtn = $('listeningPreviewBtn');
+      if (previewBtn) {
+        previewBtn.classList.add('playing');
+        previewBtn.innerHTML = '<span class="preview-icon">⏹</span> Tinglanmoqda...';
+      }
+      if (playerStatusTextEl) {
+        playerStatusTextEl.textContent = `Ovoz sinovi: ${voice ? voice.name : 'Natural Female'} (${this.selectedAccent})`;
+      }
+
+      utt.onend = () => {
+        if (previewBtn) {
+          previewBtn.classList.remove('playing');
+          previewBtn.innerHTML = '<span class="preview-icon">▶</span> Ovozni sinash';
+        }
+        if (playerStatusTextEl) {
+          playerStatusTextEl.textContent = 'Tinglashga tayyor';
+        }
+      };
+
+      utt.onerror = () => {
+        if (previewBtn) {
+          previewBtn.classList.remove('playing');
+          previewBtn.innerHTML = '<span class="preview-icon">▶</span> Ovozni sinash';
+        }
+      };
+
+      window.speechSynthesis.speak(utt);
+    },
+
+    stop() {
+      if (this.audioElement) {
+        try {
+          this.audioElement.pause();
+          this.audioElement.currentTime = 0;
+        } catch (e) {}
+        this.audioElement = null;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      this.stopKeepAlive();
+    },
+
+    startKeepAlive() {
+      this.stopKeepAlive();
+      this.keepAliveInterval = setInterval(() => {
+        if (audioState === 'playing' && window.speechSynthesis.speaking) {
+          window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }
+      }, 10000);
+    },
+
+    stopKeepAlive() {
+      if (this.keepAliveInterval) {
+        clearInterval(this.keepAliveInterval);
+        this.keepAliveInterval = null;
+      }
+    }
+  };
+
   function calculateAudioRate(level, speed) {
-    let base = 0.95;
-    if (level === 'A1' || level === 'A2') base = 0.88;
-    else if (level === 'B1') base = 0.95;
+    let base = 0.96;
+    if (level === 'A1' || level === 'A2') base = 0.94;
+    else if (level === 'B1') base = 0.97;
     else if (level === 'B2' || level === 'C1') base = 1.0;
-    return Math.max(0.6, Math.min(1.8, base * speed));
+    return Math.max(0.75, Math.min(1.3, base * speed));
   }
 
   function updatePlayerUI() {
@@ -1844,23 +2045,81 @@
 
   function startAudioPlayback() {
     if (!currentListeningExercise) return;
+
+    // Prerecorded / Cached audio file tekshirish
+    const audioUrl = currentListeningExercise.audioUrl || currentListeningExercise.audioFile;
+    if (audioUrl) {
+      playPrerecordedAudio(audioUrl);
+      return;
+    }
+
+    playNeuralSpeech();
+  }
+
+  function playPrerecordedAudio(url) {
+    ListeningAudioEngine.stop();
+    audioState = 'playing';
+    updatePlayerUI();
+
+    const audio = new Audio(url);
+    ListeningAudioEngine.audioElement = audio;
+    audio.playbackRate = playbackSpeed;
+    audio.muted = isMuted;
+
+    audio.addEventListener('loadedmetadata', () => {
+      audioTotalSec = Math.round(audio.duration || currentListeningExercise.durationSec || 35);
+      if (audioCurrentSec > 0 && audioCurrentSec < audioTotalSec) {
+        audio.currentTime = audioCurrentSec;
+      }
+      updatePlayerUI();
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      if (audioState !== 'playing') return;
+      audioCurrentSec = audio.currentTime;
+      updatePlayerUI();
+    });
+
+    audio.addEventListener('ended', () => {
+      finishAudioPlayback();
+    });
+
+    audio.addEventListener('error', (e) => {
+      console.warn('Audio faylni ijro etishda xatolik, SpeechSynthesis rejimiga o\'tilmoqda:', e);
+      playNeuralSpeech();
+    });
+
+    audio.play().catch(() => {
+      playNeuralSpeech();
+    });
+  }
+
+  function playNeuralSpeech() {
     if (!('speechSynthesis' in window)) {
       if (playerStatusTextEl) playerStatusTextEl.textContent = "Brauzeringiz ovoz tizimini qo'llab-quvvatlamaydi.";
       return;
     }
 
-    window.speechSynthesis.cancel();
+    ListeningAudioEngine.stop();
     audioState = 'playing';
     updatePlayerUI();
 
-    const script = currentListeningExercise.audioScript || currentListeningExercise.audioText || currentListeningExercise.transcript || '';
+    const script = prepareNaturalText(
+      currentListeningExercise.audioText ||
+      currentListeningExercise.audioScript ||
+      currentListeningExercise.transcript ||
+      ''
+    );
+
     const utt = new SpeechSynthesisUtterance(script);
     currentUtterance = utt;
+    ListeningAudioEngine.currentUtterance = utt;
 
-    const femaleVoice = getNativeFemaleVoice();
-    if (femaleVoice) utt.voice = femaleVoice;
-    utt.lang = 'en-US';
+    const voice = ListeningAudioEngine.activeVoice || ListeningAudioEngine.pickBestNaturalVoice(ListeningAudioEngine.selectedAccent);
+    if (voice) utt.voice = voice;
+    utt.lang = (ListeningAudioEngine.selectedAccent === 'UK') ? 'en-GB' : 'en-US';
     utt.rate = calculateAudioRate(currentListeningExercise.level, playbackSpeed);
+    utt.pitch = 1.0;
     utt.volume = isMuted ? 0 : 1;
 
     const estimatedDuration = Math.round((currentListeningExercise.durationSec || 35) / playbackSpeed);
@@ -1870,6 +2129,17 @@
     }
 
     const startWallTime = Date.now() - (audioCurrentSec * 1000);
+    ListeningAudioEngine.textLength = script.length || 1;
+
+    // Real-time word boundary sync
+    utt.onboundary = (e) => {
+      if (audioState !== 'playing') return;
+      if (e.charIndex !== undefined && ListeningAudioEngine.textLength > 0) {
+        const charPct = Math.min(1, Math.max(0, e.charIndex / ListeningAudioEngine.textLength));
+        audioCurrentSec = Math.round(charPct * audioTotalSec);
+        updatePlayerUI();
+      }
+    };
 
     if (audioTimerInterval) clearInterval(audioTimerInterval);
     audioTimerInterval = setInterval(() => {
@@ -1882,12 +2152,20 @@
       }
     }, 100);
 
+    utt.onstart = () => {
+      audioState = 'playing';
+      updatePlayerUI();
+      ListeningAudioEngine.startKeepAlive();
+    };
+
     utt.onend = () => {
+      ListeningAudioEngine.stopKeepAlive();
       finishAudioPlayback();
     };
 
     utt.onerror = (e) => {
       console.warn('SpeechSynthesis xatolik:', e);
+      ListeningAudioEngine.stopKeepAlive();
       finishAudioPlayback();
     };
 
@@ -1900,9 +2178,13 @@
       clearInterval(audioTimerInterval);
       audioTimerInterval = null;
     }
+    if (ListeningAudioEngine.audioElement) {
+      try { ListeningAudioEngine.audioElement.pause(); } catch (e) {}
+    }
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
+    ListeningAudioEngine.stopKeepAlive();
     updatePlayerUI();
   }
 
@@ -1913,9 +2195,7 @@
       clearInterval(audioTimerInterval);
       audioTimerInterval = null;
     }
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    ListeningAudioEngine.stop();
     updatePlayerUI();
   }
 
@@ -1927,6 +2207,10 @@
   function openListeningExercise(id) {
     const ex = listeningExercisesData.find((item) => item.id === id) || listeningExercisesData[0];
     if (!ex) return;
+
+    ListeningAudioEngine.stop();
+    ListeningAudioEngine.init();
+    ListeningAudioEngine.updateVoiceUI();
 
     currentListeningExercise = ex;
     currentQIndex = 0;
@@ -2568,6 +2852,7 @@
   }
 
   function exitListening() {
+    ListeningAudioEngine.stop();
     pauseAudioPlayback();
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -2653,6 +2938,24 @@
       if (audioState === 'playing' && currentUtterance) {
         startAudioPlayback();
       }
+    });
+  }
+
+  if (voiceAccentToggleEl) {
+    voiceAccentToggleEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-accent-opt');
+      if (!btn || !btn.dataset.accent) return;
+      const acc = btn.dataset.accent;
+      ListeningAudioEngine.setAccent(acc);
+      if (audioState === 'playing') {
+        startAudioPlayback();
+      }
+    });
+  }
+
+  if (listeningPreviewBtn) {
+    listeningPreviewBtn.addEventListener('click', () => {
+      ListeningAudioEngine.playPreview();
     });
   }
 
@@ -2915,5 +3218,6 @@
   dictaphone.init();
   updateSpeedDisplay();
   renderHome();
+  ListeningAudioEngine.init();
 
 })();
